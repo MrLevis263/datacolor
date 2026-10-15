@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COLOR DIGITAL - Quản Lý & So Sánh Màu</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-blue: #1877f2;
+      --purple-accent: #8b5cf6;
+      --danger-red: #ef4444;
+      --success-green: #10b981;
+      --warning-amber: #f59e0b;
+      --bg-glass: rgba(255, 255, 255, 0.94);
+      --bg-glass-card: rgba(255, 255, 255, 0.88);
+      --border-radius: 16px;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; 
+      -webkit-tap-highlight-color: transparent; 
+    }
+    
+    body { 
+      padding: 20px; 
+      background: linear-gradient(rgba(10, 15, 30, 0.75), rgba(10, 15, 30, 0.75)), 
+                  url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+      background-size: cover;
+      color: #1c1e21; 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .app-viewport {
+      width: 100%;
+      max-width: 1440px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Top Navigation Bar */
+    .top-navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 16px;
+      width: 100%;
+      padding: 0 4px;
+    }
+
+    .watermark-badge {
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 6px 16px;
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .app-title { 
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.2rem; 
+      font-weight: 900; 
+      text-transform: uppercase; 
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 40%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.8));
+      line-height: 1.1;
+    }
+
+    /* Main Navigation Tabs */
+    .tabs-navigation {
+      display: flex;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 8px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 16px;
+      gap: 10px;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
+      width: 100%;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 20px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 800;
+      font-size: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .tab-btn.active {
+      background: var(--primary-blue);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(24, 119, 242, 0.45);
+    }
+
+    /* Tab Content Areas */
+    .tab-content {
+      display: none;
+      flex: 1;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Form Elements & Inputs */
+    h2, h3 { color: #0f172a; font-size: 1rem; font-weight: 800; }
+    
+    input[type="text"], input[type="password"], select { 
+      width: 100%; 
+      height: 40px; 
+      padding: 8px 14px; 
+      border: 1px solid #cbd5e1; 
+      border-radius: 10px; 
+      font-size: 13px; 
+      outline: none; 
+      background-color: #ffffff; 
+      font-weight: 600;
+      color: #0f172a;
+    }
+    input[type="text"]:focus, select:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(24,119,242,0.15); }
+    input[type="text"]:disabled { background-color: #f1f5f9; color: #64748b; }
+
+    .btn { 
+      min-height: 40px; 
+      background: var(--primary-blue); 
+      color: white; 
+      border: none; 
+      padding: 8px 16px; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      font-weight: 700; 
+      font-size: 13px; 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px; 
+      transition: all 0.2s;
+    }
+    .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-secondary { background: #e2e8f0; color: #0f172a; }
+    .btn-warning { background: var(--warning-amber); color: white; }
+    .btn-danger { background: var(--danger-red); color: white; }
+    .btn-success { background: var(--success-green); color: white; }
+    .btn-purple { background: var(--purple-accent); color: white; }
+
+    /* TAB 1: Library & Compare Components */
+    .compare-section { 
+      position: relative; 
+      margin-bottom: 18px; 
+      padding: 16px; 
+      background: #ffffff; 
+      border: 1px solid #cbd5e1; 
+      border-radius: 14px; 
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+    .compare-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .compare-header h3 {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .size-selector-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+    .size-selector-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #475569;
+      margin-right: 4px;
+      padding-left: 6px;
+    }
+    .size-btn {
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .size-btn.active {
+      background: #ffffff;
+      color: var(--primary-blue);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-weight: 800;
+    }
+
+    .btn-clear-all { 
+      background: #fee2e2; 
+      color: var(--danger-red); 
+      border: 1px solid #fca5a5; 
+      border-radius: 20px; 
+      padding: 6px 16px; 
+      font-size: 12px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      display: flex; 
+      align-items: center; 
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-clear-all:hover { background: var(--danger-red); color: white; }
+
+    .compare-container { 
+      display: flex; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      border: 2px solid #cbd5e1; 
+      background: #f8fafc; 
+      width: 100%; 
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+    }
+
+    .btn-toggle-tints {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-toggle-tints:hover {
+      background: #e2e8f0;
+    }
+    .btn-toggle-tints.active {
+      background: #e0e7ff;
+      color: #4338ca;
+      border-color: #c7d2fe;
+    }
+
+    /* Khi ẩn dải màu nhạt */
+    .compare-container.hide-tints .compare-tints-container {
+      display: none !important;
+    }
+
+    .compare-column {
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .compare-column:active {
+      cursor: grabbing;
+    }
+    .compare-column.dragging {
+      opacity: 0.4;
+      transform: scale(0.96);
+    }
+    .compare-column.drag-over {
+      outline: 2px dashed var(--primary-blue);
+      outline-offset: -2px;
+      background: rgba(24, 119, 242, 0.08);
+    }
+
+    /* Kích thước NHỎ (Small) */
+    .compare-container.size-sm .compare-main-color { height: 140px; }
+    .compare-container.size-sm .compare-color-name { font-size: 11px; }
+
+    /* Kích thước VỪA (Medium) */
+    .compare-container.size-md .compare-main-color { height: 220px; }
+    .compare-container.size-md .compare-color-name { font-size: 12px; }
+
+    /* Kích thước LỚN (Large) */
+    .compare-container.size-lg .compare-main-color { height: 320px; }
+    .compare-container.size-lg .compare-color-name { font-size: 13px; letter-spacing: 0.3px; }
+
+    .compare-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: none;
+      position: relative;
+    }
+    .compare-column:last-child { border-right: none; }
+
+    .compare-main-color {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.85);
+      font-weight: 800;
+      position: relative;
+      padding: 10px 6px;
+      flex-shrink: 0;
+    }
+
+    .compare-tints-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      flex-shrink: 0;
+      border-top: none;
+    }
+
+    .tint-box {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(0, 0, 0, 0.75);
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+      border-bottom: none;
+    }
+
+    .compare-info-label {
+      background: #ffffff;
+      padding: 6px 4px;
+      text-align: center;
+      border-top: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .compare-color-name {
+      font-weight: 800;
+      line-height: 1.2;
+      word-break: break-word;
+      text-align: center;
+      color: #0f172a;
+    }
+
+    .remove-compare-btn { 
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.45); 
+      color: white; 
+      border: 1px solid rgba(255,255,255,0.4); 
+      border-radius: 50%; 
+      width: 26px; 
+      height: 26px; 
+      font-size: 12px; 
+      cursor: pointer; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 2;
+    }
+    .remove-compare-btn:hover { background: var(--danger-red); }
+
+    .filter-group { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+    .filter-group > div { flex: 1; min-width: 180px; }
+    
+    .palette-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+    .palette-header h2 { font-size: 1.15rem; font-weight: 900; }
+    .global-tools { display: flex; gap: 8px; flex-wrap: wrap; }
+    .global-tools .btn { min-height: 34px; padding: 6px 12px; font-size: 12px; }
+
+    .az-jump-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }
+    .az-jump-bar::-webkit-scrollbar { height: 5px; }
+    .az-jump-bar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .az-letter-btn {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #334155;
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .az-letter-btn:hover {
+      background: var(--primary-blue);
+      color: white;
+      border-color: var(--primary-blue);
+    }
+
+    #paletteContainer { flex: 1; overflow-y: auto; padding-right: 6px; max-height: 600px; }
+    .letter-group-section { margin-bottom: 18px; }
+    .letter-group-header {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--primary-blue);
+      background: #e0f2fe;
+      border-left: 5px solid var(--primary-blue);
+      padding: 6px 12px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .letter-group-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0369a1;
+      background: #bae6fd;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+
+    .palette-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    .color-card { background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.04); position: relative; transition: transform 0.2s; }
+    .color-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+    .color-box { height: 65px; width: 100%; position: relative; }
+    
+    .delete-card-btn, .hide-card-btn { display: none; position: absolute; top: 6px; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 12px; color: white; cursor: pointer; align-items: center; justify-content: center; z-index: 2; }
+    .delete-card-btn { right: 6px; background: rgba(239, 68, 68, 0.9); }
+    .hide-card-btn { left: 6px; background: rgba(139, 92, 246, 0.9); }
+    
+    .show-delete-btn .delete-card-btn { display: flex; }
+    .show-hide-btn .hide-card-btn { display: flex; }
+
+    .color-info { padding: 8px; display: flex; flex-direction: column; gap: 5px; }
+    .compare-checkbox { display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; color: #334155; font-weight: 700; }
+    .compare-checkbox input { width: 16px; height: 16px; }
+    
+    .small-name-input { font-size: 12px !important; padding: 4px 6px !important; height: 30px !important; font-weight: 700; }
+    .material-select { height: 28px !important; padding: 2px 6px !important; font-size: 11px !important; border-radius: 6px !important; }
+
+    /* TAB 2: Add Color Layout */
+    .tab2-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+    }
+    .panel-card {
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .upload-zone { margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .file-input { display: none; }
+    .file-label { text-align: center; display: flex; align-items: center; justify-content: center; min-height: 40px; padding: 8px 12px; background: #e2e8f0; color: #0f172a; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 13px; }
+    .paste-hint { font-size: 12px; color: #1877f2; background: #e7f3ff; padding: 8px; border-radius: 8px; border: 1px dashed #1877f2; text-align: center; font-weight: 600; }
+    #imageCanvas { max-width: 100%; height: auto; border: 1px dashed #cbd5e1; cursor: crosshair; margin-top: 8px; border-radius: 8px; display: block; background: #f8fafc; }
+
+    .color-preview-bar { display: flex; align-items: center; gap: 12px; margin: 12px 0; padding: 10px 14px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; }
+    .swatch-display { width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+    .color-preview-text { font-size: 14px; color: #0f172a; font-weight: 800; }
+
+    /* TAB 3: Settings & Chest */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    /* Toast Notification */
+    #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: #0f172a; color: white; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; box-shadow: 0 6px 20px rgba(0,0,0,0.3); border-left: 5px solid var(--primary-blue); }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      .app-title { font-size: 1.4rem; }
+      .tabs-navigation { flex-direction: row; padding: 6px; }
+      .tab-btn { padding: 8px 6px; font-size: 12px; gap: 4px; }
+      .tab2-grid { grid-template-columns: 1fr; }
+      .palette-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .compare-container { flex-direction: column; min-height: auto !important; }
+      .compare-column { border-right: none; border-bottom: none; }
+      .compare-main-color { padding: 16px 10px; }
+      .compare-color-name { font-size: 1.2rem !important; }
+      .tint-box { padding: 6px 0; }
+      #toast-container { left: 14px; right: 14px; bottom: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+    <div class="top-navbar">
+      <h1 class="app-title">COLOR DIGITAL</h1>
+      <div class="watermark-badge">
+        Made By Levi'S<br>
+        (V231780)
+      </div>
+    </div>
+
+    <div class="tabs-navigation">
+      <button class="tab-btn active" onclick="switchTab(1)" id="tabBtn1">
+        <span>📚</span> Tab 1: Thư Viện & So Sánh
+      </button>
+      <button class="tab-btn" onclick="switchTab(2)" id="tabBtn2">
+        <span>🎨</span> Tab 2: Thêm Màu Mẫu
+      </button>
+      <button class="tab-btn" onclick="switchTab(3)" id="tabBtn3">
+        <span>⚙️</span> Tab 3: Thông Tin & Cài Đặt
+      </button>
+    </div>
+
+    <!-- TAB 1: THƯ VIỆN VÀ SO SÁNH -->
+    <div class="tab-content active" id="tabContent1">
+      <!-- Khu vực so sánh màu to rõ & Có tùy chọn kích thước -->
+      <div class="compare-section">
+        <div class="compare-header">
+          <h3>🔍 KHU VỰC SO SÁNH MÀU & ĐỘ NHẠT (80%, 60%, 40%, 20%)</h3>
+          
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <!-- Nút Bật/Tắt Màu Nhạt -->
+            <button class="btn-toggle-tints" id="btnToggleTints" onclick="toggleTintsDisplay()">
+              <span id="toggleTintsIcon">🎨</span> <span id="toggleTintsText">Ẩn màu nhạt</span>
+            </button>
+
+            <!-- Bộ chọn 3 kích thước -->
+            <div class="size-selector-group">
+              <span class="size-selector-title">Kích thước:</span>
+              <button class="size-btn" onclick="setCompareSize('sm')" id="sizeBtnSm">Small</button>
+              <button class="size-btn active" onclick="setCompareSize('md')" id="sizeBtnMd">Medium</button>
+              <button class="size-btn" onclick="setCompareSize('lg')" id="sizeBtnLg">Large</button>
+            </div>
+
+            <button class="btn-clear-all" onclick="clearAllCompare()" title="Xóa tất cả màu so sánh">✕ Xóa tất cả</button>
+          </div>
+        </div>
+
+        <div class="compare-container size-md" id="compareContainer">
+          <div style="padding: 40px; color: #94a3b8; margin: auto; font-size: 14px; font-weight: 700; text-align: center;">
+            👈 Tích chọn ô <b>"So sánh"</b> ở danh sách mẫu bên dưới để đưa màu vào đây
+          </div>
+        </div>
+      </div>
+
+      <!-- Bộ lọc và tìm kiếm -->
+      <div class="filter-group">
+        <div>
+          <h3>Tìm Kiếm</h3>
+          <input type="text" id="searchInput" placeholder="Nhập tên/mã màu..." oninput="renderPalette()">
+        </div>
+        <div>
+          <h3>Loại Vật Liệu</h3>
+          <select id="materialFilter" onchange="renderPalette()">
+            <option value="ALL">Tất cả (Đai & Vải)</option>
+            <option value="Đai">Chỉ Đai</option>
+            <option value="Vải">Chỉ Vải</option>
+          </select>
+        </div>
+        <div>
+          <h3>Sắp Xếp Nội Bộ</h3>
+          <select id="sortSelect" onchange="renderPalette()">
+            <option value="name-asc">Tên (A - Z)</option>
+            <option value="name-desc">Tên (Z - A)</option>
+            <option value="newest">Mới nhất</option>
+            <option value="oldest">Cũ nhất</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Bảng màu chính & Công cụ -->
+      <div class="palette-header">
+        <h2>Danh Sách Mẫu Màu (A - Z)</h2>
+        <div class="global-tools">
+          <button class="btn btn-warning" id="btnEnableEdit" onclick="toggleGlobalEdit(true)">Sửa</button>
+          <button class="btn btn-secondary" id="btnDisableEdit" onclick="toggleGlobalEdit(false)" style="display: none;">Khóa Sửa</button>
+          
+          <button class="btn btn-danger" id="btnEnableDelete" onclick="toggleDeleteMode(true)">Xóa</button>
+          <button class="btn btn-secondary" id="btnDisableDelete" onclick="toggleDeleteMode(false)" style="display: none;">Khóa Xóa</button>
+
+          <button class="btn btn-purple" id="btnEnableHide" onclick="toggleHideMode(true)">Ẩn</button>
+          <button class="btn btn-secondary" id="btnDisableHide" onclick="toggleHideMode(false)" style="display: none;">Khóa Ẩn</button>
+        </div>
+      </div>
+
+      <!-- Thanh nhảy nhanh A-Z -->
+      <div class="az-jump-bar" id="azJumpBar"></div>
+      
+      <!-- Container chứa các danh sách màu -->
+      <div id="paletteContainer"></div>
+    </div>
+
+    <!-- TAB 2: THÊM MÀU MẪU -->
+    <div class="tab-content" id="tabContent2">
+      <div class="tab2-grid">
+        <!-- Panel 1: Lấy màu từ ảnh Canvas -->
+        <div class="panel-card">
+          <h2 style="margin-bottom: 10px;">1. Lấy màu từ ảnh</h2>
+          <div class="upload-zone">
+            <label for="imageLoader" class="file-label">📂 Chọn ảnh từ máy...</label>
+            <input type="file" id="imageLoader" class="file-input" accept="image/*">
+            <button class="btn btn-secondary" style="min-height:36px;" onclick="clearCanvas()">Xóa ảnh canvas</button>
+            <div class="paste-hint">💡 <b>Ctrl + V</b> để dán ảnh trực tiếp từ clipboard</div>
+          </div>
+          <canvas id="imageCanvas"></canvas>
+        </div>
+
+        <!-- Panel 2: Nhập thông tin & Lưu dữ liệu -->
+        <div class="panel-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h2 style="margin-bottom: 10px;">2. Màu đã chọn & Thêm mẫu</h2>
+            <div class="color-preview-bar">
+              <div class="swatch-display" id="colorSwatch" style="background-color: #1877f2;"></div>
+              <span class="color-preview-text" id="colorStatusText">Chưa chọn mẫu (#1877F2)</span>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+              <div>
+                <h3 style="margin-bottom: 6px;">Tên / Mã Màu:</h3>
+                <input type="text" id="colorName" placeholder="Nhập mã / tên màu (vd: Y6103C)...">
+              </div>
+              <div>
+                <h3 style="margin-bottom: 6px;">Loại Vật Liệu:</h3>
+                <select id="colorMaterial">
+                  <option value="Đai">Vật liệu: Đai (Belt/Strap)</option>
+                  <option value="Vải">Vật liệu: Vải (Fabric)</option>
+                  <option value="Cả hai" selected>Vật liệu: Cả Đai & Vải</option>
+                </select>
+              </div>
+            </div>
+            
+            <button class="btn" style="width: 100%; min-height: 44px; font-size: 14px;" onclick="addColor()">➕ Thêm Vào Bảng Màu (Yêu cầu MK)</button>
+          </div>
+
+          <hr style="margin: 20px 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+          <div>
+            <h2 style="margin-bottom: 10px;">3. Sao lưu & Xuất dữ liệu</h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn btn-success" style="flex:1;" onclick="exportData()">⬇️ Export JSON</button>
+              <button class="btn btn-secondary" style="flex:1;" onclick="triggerImportJson()">⬆️ Import JSON</button>
+              <input type="file" id="importFile" class="file-input" accept=".json" onchange="importData(event)">
+              <button class="btn btn-purple" style="flex:1;" onclick="exportCSS()">🎨 Xuất CSS</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: THÔNG TIN VÀ CÀI ĐẶT -->
+    <div class="tab-content" id="tabContent3">
+      <div class="settings-grid">
+        <!-- Đổi Nền -->
+        <div class="panel-card">
+          <h2 style="margin-bottom: 12px; color: var(--primary-blue);">🖼️ Thay Đổi Hình Nền App</h2>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <h3 style="margin-bottom: 6px;">Dùng Link Ảnh (URL):</h3>
+              <input type="text" id="bgUrlInput" placeholder="Dán đường dẫn ảnh mạng vào đây...">
+            </div>
+            <button class="btn" onclick="setBackgroundFromUrl()">Áp dụng link ảnh</button>
+            <div style="text-align: center; font-size: 12px; color: #64748b;">Hoặc</div>
+            <button class="btn btn-secondary" onclick="triggerBgUpload()">Tải ảnh nền từ máy tính/điện thoại...</button>
+            <input type="file" id="bgUploader" class="file-input" accept="image/*" onchange="setBackgroundFromFile(event)">
+            <button class="btn btn-secondary" style="margin-top: 4px;" onclick="resetBackground()">Khôi phục nền mặc định</button>
+          </div>
+        </div>
+
+        <!-- Mật khẩu -->
+        <div class="panel-card">
+          <h2 style="margin-bottom: 12px; color: var(--warning-amber);">🔒 Đổi Mật Khẩu Bảo Mật</h2>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <h3 style="margin-bottom: 6px;">Mật Khẩu Hiện Tại:</h3>
+              <input type="password" id="oldPass" placeholder="Nhập mật khẩu hiện tại...">
+            </div>
+            <div>
+              <h3 style="margin-bottom: 6px;">Mật Khẩu Mới:</h3>
+              <input type="password" id="newPass" placeholder="Nhập mật khẩu mới...">
+            </div>
+            <button class="btn btn-warning" style="margin-top: 4px;" onclick="changePassword()">Cập nhật Mật khẩu</button>
+          </div>
+        </div>
+
+        <!-- Kho màu ẩn -->
+        <div class="panel-card" style="grid-column: 1 / -1;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h2 style="color: var(--purple-accent);">📦 Quản Lý Kho Màu Nhuộm Ẩn</h2>
+            <span id="hiddenCountBadge" style="font-size: 13px; font-weight: 700; background: #f3e8ff; color: var(--purple-accent); padding: 4px 12px; border-radius: 14px;">0 màu đã ẩn</span>
+          </div>
+          
+          <input type="text" id="searchHiddenInput" placeholder="Tìm tên màu trong kho ẩn..." oninput="renderHiddenPalette()" style="margin-bottom: 12px;">
+
+          <div id="hiddenPaletteContainer" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 6px;"></div>
+          
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button class="btn btn-secondary" onclick="restoreAllHidden()">Khôi phục tất cả</button>
+            <button class="btn btn-danger" onclick="clearAllHidden()">Xóa vĩnh viễn kho ẩn</button>
+          </div>
+        </div>
+
+        <!-- Thông tin tác giả -->
+        <div class="panel-card" style="grid-column: 1 / -1; text-align: center; background: #f8fafc;">
+          <h3 style="font-size: 1rem; color: #475569;">COLOR DIGITAL APPLICATION</h3>
+          <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Phiên bản V231780 | Phát triển bởi <b>Levi'S</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    // Dữ liệu gốc 273 mẫu màu mới nhất từ JSON
+    const INITIAL_JSON_DATA = [
+      {"id": 1, "name": "Y1001A NEW", "material": "Vải", "hex": "#d9a032"},
+      {"id": 2, "name": "Y1003A NEW", "material": "Vải", "hex": "#f0c822"},
+      {"id": 3, "name": "Y1004G NEW", "material": "Vải", "hex": "#bd7808"},
+      {"id": 4, "name": "Y1005G NEW", "material": "Vải", "hex": "#a66000"},
+      {"id": 5, "name": "Y1007A NEW", "material": "Vải", "hex": "#e36b00"},
+      {"id": 6, "name": "Y1008A NEW", "material": "Vải", "hex": "#e08400"},
+      {"id": 7, "name": "Y1009A NEW", "material": "Vải", "hex": "#f2ab00"},
+      {"id": 8, "name": "Y1013A NEW", "material": "Vải", "hex": "#f5d411"},
+      {"id": 9, "name": "Y1013A 129211", "material": "Vải", "hex": "#f5cb00"},
+      {"id": 10, "name": "Y1014A NEW", "material": "Vải", "hex": "#f59e00"},
+      {"id": 11, "name": "Y1014A 129211", "material": "Vải", "hex": "#f5a800"},
+      {"id": 12, "name": "Y1016A NEW", "material": "Vải", "hex": "#fcba03"},
+      {"id": 13, "name": "Y1017A NEW", "material": "Vải", "hex": "#ca7e14"},
+      {"id": 14, "name": "Y1018A 129211", "material": "Vải", "hex": "#ed8e21"},
+      {"id": 15, "name": "Y1019A NEW", "material": "Vải", "hex": "#f7b216"},
+      {"id": 16, "name": "Y1020A NEW", "material": "Vải", "hex": "#e05807"},
+      {"id": 17, "name": "Y1021A NEW", "material": "Vải", "hex": "#8f3403"},
+      {"id": 18, "name": "Y1023A 129211", "material": "Vải", "hex": "#e5b325"},
+      {"id": 19, "name": "Y1024G 122089", "material": "Vải", "hex": "#a3320b"},
+      {"id": 20, "name": "Y1026G NEW", "material": "Vải", "hex": "#b27309"},
+      {"id": 21, "name": "Y1028A NEW", "material": "Vải", "hex": "#faeb23"},
+      {"id": 22, "name": "Y1028A 129211", "material": "Vải", "hex": "#dff016"},
+      {"id": 23, "name": "Y1030G 129211", "material": "Vải", "hex": "#f5be14"},
+      {"id": 24, "name": "Y1031A NEW", "material": "Vải", "hex": "#fce803"},
+      {"id": 25, "name": "Y1031A 129211", "material": "Vải", "hex": "#f5e42a"},
+      {"id": 26, "name": "Y1034A NEW", "material": "Vải", "hex": "#f2b10c"},
+      {"id": 27, "name": "Y1034A 129211", "material": "Vải", "hex": "#fed800"},
+      {"id": 28, "name": "Y1046G 129211", "material": "Vải", "hex": "#8c4d05"},
+      {"id": 29, "name": "Y1047G NEW", "material": "Vải", "hex": "#854906"},
+      {"id": 30, "name": "Y1047G 129211", "material": "Vải", "hex": "#7d4200"},
+      {"id": 31, "name": "Y1103 129211", "material": "Vải", "hex": "#b36b00"},
+      {"id": 32, "name": "Y1104 NEW", "material": "Vải", "hex": "#ba6a02"},
+      {"id": 33, "name": "Y1104 129211", "material": "Vải", "hex": "#bd6d02"},
+      {"id": 34, "name": "Y1108 129211", "material": "Vải", "hex": "#b36200"},
+      {"id": 35, "name": "Y1314 129211 - 001", "material": "Vải", "hex": "#f56e07"},
+      {"id": 36, "name": "Y1115 129211", "material": "Vải", "hex": "#ff5500"},
+      {"id": 37, "name": "Y1120 129211", "material": "Vải", "hex": "#b87614"},
+      {"id": 38, "name": "Y1121 129211", "material": "Vải", "hex": "#a35f08"},
+      {"id": 39, "name": "Y1126 [01]", "material": "Vải", "hex": "#f2b407"},
+      {"id": 40, "name": "Y1130 129211", "material": "Vải", "hex": "#914c00"},
+      {"id": 41, "name": "Y7101H NEW", "material": "Vải", "hex": "#ffd000"},
+      {"id": 42, "name": "Y7102H NEW", "material": "Vải", "hex": "#d1310d"},
+      {"id": 43, "name": "Y7107H 129211", "material": "Vải", "hex": "#fcd714"},
+      {"id": 44, "name": "Y7113H NEW", "material": "Vải", "hex": "#f79307"},
+      {"id": 45, "name": "R2001A NEW", "material": "Vải", "hex": "#a81d2a"},
+      {"id": 46, "name": "R2001A 129211", "material": "Vải", "hex": "#9e1d29"},
+      {"id": 47, "name": "R2003A NEW", "material": "Vải", "hex": "#8f1728"},
+      {"id": 48, "name": "R2003A 129211", "material": "Vải", "hex": "#c4215b"},
+      {"id": 49, "name": "R2005A NEW", "material": "Vải", "hex": "#730826"},
+      {"id": 50, "name": "R2005A 129211 [01]", "material": "Vải", "hex": "#690621"},
+      {"id": 51, "name": "R2006A NEW", "material": "Vải", "hex": "#7d0b3a"},
+      {"id": 52, "name": "R2006A 129211", "material": "Vải", "hex": "#91134a"},
+      {"id": 53, "name": "R2007G 129211", "material": "Vải", "hex": "#bd5358"},
+      {"id": 54, "name": "R2008G NEW", "material": "Vải", "hex": "#5e1115"},
+      {"id": 55, "name": "R2008G 129211", "material": "Vải", "hex": "#591114"},
+      {"id": 56, "name": "R2009A NEW", "material": "Vải", "hex": "#8a0337"},
+      {"id": 57, "name": "R2009A 129211", "material": "Vải", "hex": "#f5027b"},
+      {"id": 58, "name": "R2011A NEW", "material": "Vải", "hex": "#d6380f"},
+      {"id": 59, "name": "R2011A 129211", "material": "Vải", "hex": "#d1320a"},
+      {"id": 60, "name": "R2012A NEW", "material": "Vải", "hex": "#8a0c10"},
+      {"id": 61, "name": "R2012A 129211", "material": "Vải", "hex": "#b81d28"},
+      {"id": 62, "name": "R2013A NEW", "material": "Vải", "hex": "#2b1920"},
+      {"id": 63, "name": "R2014A NEW", "material": "Vải", "hex": "#9c2759"},
+      {"id": 64, "name": "R2014A 129211", "material": "Vải", "hex": "#a82a63"},
+      {"id": 65, "name": "R2015A NEW", "material": "Vải", "hex": "#821931"},
+      {"id": 66, "name": "R2015A 129211", "material": "Vải", "hex": "#8a1c35"},
+      {"id": 67, "name": "R2021A 129211", "material": "Vải", "hex": "#c4335c"},
+      {"id": 68, "name": "R2022G 129211", "material": "Vải", "hex": "#a64953"},
+      {"id": 69, "name": "R2027A NEW", "material": "Vải", "hex": "#b31b47"},
+      {"id": 70, "name": "R2027A 129211", "material": "Vải", "hex": "#b82a54"},
+      {"id": 71, "name": "R2028A NEW", "material": "Vải", "hex": "#70112c"},
+      {"id": 72, "name": "R2028A 129211", "material": "Vải", "hex": "#70162e"},
+      {"id": 73, "name": "R2030A NEW", "material": "Vải", "hex": "#6e0d46"},
+      {"id": 74, "name": "R2030A 129211", "material": "Vải", "hex": "#78144f"},
+      {"id": 75, "name": "R2031A 129211", "material": "Vải", "hex": "#301525"},
+      {"id": 76, "name": "R2032A 129211", "material": "Vải", "hex": "#4d1021"},
+      {"id": 77, "name": "R2033G 129211", "material": "Vải", "hex": "#8f1e29"},
+      {"id": 78, "name": "R2034G NEW", "material": "Vải", "hex": "#471018"},
+      {"id": 79, "name": "R2034G 129211", "material": "Vải", "hex": "#451119"},
+      {"id": 80, "name": "R2035A NEW", "material": "Vải", "hex": "#470e1b"},
+      {"id": 81, "name": "R2035G 129211", "material": "Vải", "hex": "#570e1f"},
+      {"id": 82, "name": "R2035A 129050", "material": "Vải", "hex": "#5e1122"},
+      {"id": 83, "name": "R2039A NEW", "material": "Vải", "hex": "#ab1d4a"},
+      {"id": 84, "name": "R2039A 129211", "material": "Vải", "hex": "#b31e4d"},
+      {"id": 85, "name": "R2040A 129211", "material": "Vải", "hex": "#631034"},
+      {"id": 86, "name": "R2043A NEW", "material": "Vải", "hex": "#a30815"},
+      {"id": 87, "name": "R2043A 129211", "material": "Vải", "hex": "#fa0279"},
+      {"id": 88, "name": "R2044A NEW", "material": "Vải", "hex": "#630b28"},
+      {"id": 89, "name": "R2044A 129211", "material": "Vải", "hex": "#730c30"},
+      {"id": 90, "name": "R2045A NEW", "material": "Vải", "hex": "#850f1b"},
+      {"id": 91, "name": "R2045A 129211", "material": "Vải", "hex": "#8a131f"},
+      {"id": 92, "name": "R2046A 129211", "material": "Vải", "hex": "#b3225a"},
+      {"id": 93, "name": "R2049A NEW", "material": "Vải", "hex": "#661127"},
+      {"id": 94, "name": "R2049A 129211", "material": "Vải", "hex": "#a34561"},
+      {"id": 95, "name": "R2053A 129211", "material": "Vải", "hex": "#782d41"},
+      {"id": 96, "name": "R2054A NEW", "material": "Vải", "hex": "#9e0d16"},
+      {"id": 97, "name": "R2054A 129211", "material": "Vải", "hex": "#9e151e"},
+      {"id": 98, "name": "R2063A NEW", "material": "Vải", "hex": "#b82352"},
+      {"id": 99, "name": "R2063A 129211", "material": "Vải", "hex": "#bf2254"},
+      {"id": 100, "name": "R2064G NEW", "material": "Vải", "hex": "#4d1121"},
+      {"id": 101, "name": "R2064G 129211", "material": "Vải", "hex": "#45111f"},
+      {"id": 102, "name": "R2101 129211", "material": "Vải", "hex": "#730d2a"},
+      {"id": 103, "name": "R2102 129211", "material": "Vải", "hex": "#6e1119"},
+      {"id": 104, "name": "R2104 NEW", "material": "Vải", "hex": "#800e4e"},
+      {"id": 105, "name": "R2104 129211", "material": "Vải", "hex": "#8c0d57"},
+      {"id": 106, "name": "R2106 129211", "material": "Vải", "hex": "#5c102c"},
+      {"id": 107, "name": "R2107 129211", "material": "Vải", "hex": "#781e22"},
+      {"id": 108, "name": "R2108 129211", "material": "Vải", "hex": "#661114"},
+      {"id": 109, "name": "R2109 129211", "material": "Vải", "hex": "#80122b"},
+      {"id": 110, "name": "R2110 129211", "material": "Vải", "hex": "#5e1121"},
+      {"id": 111, "name": "R2112 129211", "material": "Vải", "hex": "#8f1c23"},
+      {"id": 112, "name": "R2114 129211", "material": "Vải", "hex": "#731336"},
+      {"id": 113, "name": "R2121 NEW", "material": "Vải", "hex": "#361622"},
+      {"id": 114, "name": "R2121 129211", "material": "Vải", "hex": "#381724"},
+      {"id": 115, "name": "R2124 129211", "material": "Vải", "hex": "#b31522"},
+      {"id": 116, "name": "R2130 129211", "material": "Vải", "hex": "#e04116"},
+      {"id": 117, "name": "R2131 NEW", "material": "Vải", "hex": "#6b1418"},
+      {"id": 118, "name": "R2132 129211", "material": "Vải", "hex": "#bd1b2b"},
+      {"id": 119, "name": "R2142 129211", "material": "Vải", "hex": "#b51b54"},
+      {"id": 120, "name": "R2146 129211", "material": "Vải", "hex": "#b30b1b"},
+      {"id": 121, "name": "R7201H NEW", "material": "Vải", "hex": "#a60f38"},
+      {"id": 122, "name": "R7202H NEW", "material": "Vải", "hex": "#a11032"},
+      {"id": 123, "name": "R7207H NEW", "material": "Vải", "hex": "#c41f27"},
+      {"id": 124, "name": "R7209H NEW", "material": "Vải", "hex": "#a61141"},
+      {"id": 125, "name": "R7210H 129211", "material": "Vải", "hex": "#870c2a"},
+      {"id": 126, "name": "R7212H", "material": "Vải", "hex": "#a31a20"},
+      {"id": 127, "name": "B3001A NEW", "material": "Đai", "hex": "#003b78"},
+      {"id": 128, "name": "B3001A 129211", "material": "Đai", "hex": "#2e6bb3"},
+      {"id": 129, "name": "B3003A 129211", "material": "Đai", "hex": "#133f85"},
+      {"id": 130, "name": "B3004A NEW", "material": "Đai", "hex": "#0064b3"},
+      {"id": 131, "name": "B3004A 129211", "material": "Đai", "hex": "#0070c7"},
+      {"id": 132, "name": "B3005A NEW", "material": "Đai", "hex": "#007a9e"},
+      {"id": 133, "name": "B3005A 129211", "material": "Đai", "hex": "#0091bf"},
+      {"id": 134, "name": "B3006G NEW", "material": "Đai", "hex": "#131a24"},
+      {"id": 135, "name": "B3006G 129211", "material": "Đai", "hex": "#243242"},
+      {"id": 136, "name": "B3008A 129211", "material": "Đai", "hex": "#1448a3"},
+      {"id": 137, "name": "B3014A NEW", "material": "Đai", "hex": "#003a73"},
+      {"id": 138, "name": "B3014A 129211", "material": "Đai", "hex": "#245f9e"},
+      {"id": 139, "name": "B3021A 129211", "material": "Đai", "hex": "#1f56b3"},
+      {"id": 140, "name": "B3022G NEW", "material": "Đai", "hex": "#15202e"},
+      {"id": 141, "name": "B3022G 129211", "material": "Đai", "hex": "#1d2a3d"},
+      {"id": 142, "name": "B3023A 122089-H082 ACID", "material": "Đai", "hex": "#183e8a"},
+      {"id": 143, "name": "B3024G 129211", "material": "Đai", "hex": "#15222e"},
+      {"id": 144, "name": "B3025A NEW", "material": "Đai", "hex": "#08339c"},
+      {"id": 145, "name": "B3025A 129211", "material": "Đai", "hex": "#1d5bbd"},
+      {"id": 146, "name": "B3026A NEW", "material": "Đai", "hex": "#0a1d40"},
+      {"id": 147, "name": "B3026A 129211", "material": "Đai", "hex": "#0d2859"},
+      {"id": 148, "name": "B3027G NEW", "material": "Đai", "hex": "#0d141f"},
+      {"id": 149, "name": "B3027G 129211", "material": "Đai", "hex": "#121d2b"},
+      {"id": 150, "name": "B3028A NEW", "material": "Đai", "hex": "#005570"},
+      {"id": 151, "name": "B3028A 129211", "material": "Đai", "hex": "#006e8f"},
+      {"id": 152, "name": "B3031A 129211", "material": "Đai", "hex": "#003f9e"},
+      {"id": 153, "name": "B3034A NEW", "material": "Đai", "hex": "#0085ad"},
+      {"id": 154, "name": "B3034A 129211", "material": "Đai", "hex": "#009bc7"},
+      {"id": 155, "name": "B3035A NEW", "material": "Đai", "hex": "#0a3a78"},
+      {"id": 156, "name": "B3035A 129211", "material": "Đai", "hex": "#124a91"},
+      {"id": 157, "name": "B3036A 129211", "material": "Đai", "hex": "#132138"},
+      {"id": 158, "name": "B3038A NEW", "material": "Đai", "hex": "#004a57"},
+      {"id": 159, "name": "B3038A 129211", "material": "Đai", "hex": "#00697a"},
+      {"id": 160, "name": "B3041A 129211", "material": "Đai", "hex": "#0d43a8"},
+      {"id": 161, "name": "B3042A NEW", "material": "Đai", "hex": "#0a3363"},
+      {"id": 162, "name": "B3042A 129211", "material": "Đai", "hex": "#0c4887"},
+      {"id": 163, "name": "B3048A 129211", "material": "Đai", "hex": "#122745"},
+      {"id": 164, "name": "B3052A 129211", "material": "Đai", "hex": "#032873"},
+      {"id": 165, "name": "B3055G NEW", "material": "Đai", "hex": "#111a24"},
+      {"id": 166, "name": "B3055G 129211", "material": "Đai", "hex": "#172330"},
+      {"id": 167, "name": "B3071A NEW", "material": "Đai", "hex": "#0f3e8f"},
+      {"id": 168, "name": "B3103 129211", "material": "Đai", "hex": "#141f2e"},
+      {"id": 169, "name": "B3106 129211", "material": "Đai", "hex": "#121c29"},
+      {"id": 170, "name": "B3110 129211", "material": "Đai", "hex": "#0e3a82"},
+      {"id": 171, "name": "B3111 129211", "material": "Đai", "hex": "#113875"},
+      {"id": 172, "name": "B3112 129211", "material": "Đai", "hex": "#008db8"},
+      {"id": 173, "name": "B3113 129211", "material": "Đai", "hex": "#131c26"},
+      {"id": 174, "name": "B3114 129211", "material": "Đai", "hex": "#10336b"},
+      {"id": 175, "name": "B3124 129211", "material": "Đai", "hex": "#131d2b"},
+      {"id": 176, "name": "B3125 129211", "material": "Đai", "hex": "#0b3f94"},
+      {"id": 177, "name": "B3128 129211", "material": "Đai", "hex": "#143a75"},
+      {"id": 178, "name": "B3129 129211", "material": "Đai", "hex": "#121b26"},
+      {"id": 179, "name": "B3136 129211", "material": "Đai", "hex": "#101821"},
+      {"id": 180, "name": "B3313 NEW", "material": "Đai", "hex": "#0f346b"},
+      {"id": 181, "name": "B7301H NEW", "material": "Đai", "hex": "#144299"},
+      {"id": 182, "name": "B7301H 129211", "material": "Đai", "hex": "#1c4fa8"},
+      {"id": 183, "name": "B7302H NEW", "material": "Đai", "hex": "#005263"},
+      {"id": 184, "name": "B7308H NEW", "material": "Đai", "hex": "#131e2b"},
+      {"id": 185, "name": "B7311H NEW", "material": "Đai", "hex": "#142130"},
+      {"id": 186, "name": "BK5002 NEW", "material": "Đai", "hex": "#121619"},
+      {"id": 187, "name": "BK5002 129211", "material": "Đai", "hex": "#171c21"},
+      {"id": 188, "name": "BK5014 129211", "material": "Đai", "hex": "#171c21"},
+      {"id": 189, "name": "BK5017 129211", "material": "Đai", "hex": "#14181c"},
+      {"id": 190, "name": "BK5019 129211", "material": "Đai", "hex": "#13171a"},
+      {"id": 191, "name": "BK5020 129211", "material": "Đai", "hex": "#121517"},
+      {"id": 192, "name": "BK5022 129211", "material": "Đai", "hex": "#12171c"},
+      {"id": 193, "name": "BK5026 NEW", "material": "Đai", "hex": "#141a1f"},
+      {"id": 194, "name": "BK5026 129211", "material": "Đai", "hex": "#161d24"},
+      {"id": 195, "name": "BK5028 129211", "material": "Đai", "hex": "#141a1f"},
+      {"id": 196, "name": "BK5030 NEW", "material": "Đai", "hex": "#111417"},
+      {"id": 197, "name": "BK5030 129211", "material": "Đai", "hex": "#15181c"},
+      {"id": 198, "name": "BK7501H NEW", "material": "Đai", "hex": "#13171a"},
+      {"id": 199, "name": "BK7506H NEW", "material": "Đai", "hex": "#14181c"},
+      {"id": 200, "name": "BK7508H NEW", "material": "Đai", "hex": "#161b1f"},
+      {"id": 201, "name": "C4006G 129211", "material": "Vải", "hex": "#3d2b27"},
+      {"id": 202, "name": "C4013G NEW", "material": "Vải", "hex": "#40261f"},
+      {"id": 203, "name": "C4013G 129211", "material": "Vải", "hex": "#422821"},
+      {"id": 204, "name": "C4028G NEW", "material": "Vải", "hex": "#211c1a"},
+      {"id": 205, "name": "C4028 129211", "material": "Vải", "hex": "#211c1a"},
+      {"id": 206, "name": "C6102 129211", "material": "Vải", "hex": "#362e2c"},
+      {"id": 207, "name": "G4002A 129211", "material": "Vải", "hex": "#004745"},
+      {"id": 208, "name": "G4003A 129211", "material": "Vải", "hex": "#1b6647"},
+      {"id": 209, "name": "G4010G 129211", "material": "Vải", "hex": "#292e21"},
+      {"id": 210, "name": "G4024A 129211", "material": "Vải", "hex": "#0e5e5b"},
+      {"id": 211, "name": "G4104 129211", "material": "Vải", "hex": "#083e38"},
+      {"id": 212, "name": "G4108 129211", "material": "Vải", "hex": "#1d7a4f"},
+      {"id": 213, "name": "P4004G 129211", "material": "Vải", "hex": "#212933"},
+      {"id": 214, "name": "P4005G 129211", "material": "Vải", "hex": "#1f2730"},
+      {"id": 215, "name": "P7101H 129211", "material": "Vải", "hex": "#1d252e"},
+      {"id": 216, "name": "P7102 129211", "material": "Vải", "hex": "#1d242c"},
+      {"id": 217, "name": "P7103 129211", "material": "Vải", "hex": "#1f2833"},
+      {"id": 218, "name": "P7104 129211", "material": "Vải", "hex": "#202830"},
+      {"id": 219, "name": "V4007A NEW", "material": "Vải", "hex": "#3f3387"},
+      {"id": 220, "name": "V4007A 129211", "material": "Vải", "hex": "#3c3385"},
+      {"id": 221, "name": "W5007A", "material": "Vải", "hex": "#e1e4e6"},
+      {"id": 222, "name": "BK9107", "material": "Đai", "hex": "#181f21"},
+      {"id": 223, "name": "BK7508H 129211", "material": "Đai", "hex": "#1c2124"},
+      {"id": 224, "name": "C6104 [06]", "material": "Vải", "hex": "#302624"},
+      {"id": 225, "name": "R2136 129211", "material": "Vải", "hex": "#871148"},
+      {"id": 226, "name": "R2140 129211 [01]", "material": "Vải", "hex": "#4f1121"},
+      {"id": 227, "name": "R2143 129211", "material": "Vải", "hex": "#ba121f"},
+      {"id": 228, "name": "IZD-2B 129211", "material": "Vải", "hex": "#82153b"},
+      {"id": 229, "name": "IZD-GX 129211", "material": "Vải", "hex": "#9c1451"},
+      {"id": 230, "name": "ZD-3G 129211", "material": "Đai", "hex": "#005c78"},
+      {"id": 231, "name": "ZD-3HR 129211", "material": "Đai", "hex": "#1448a3"},
+      {"id": 232, "name": "ZD-5HG 129211", "material": "Vải", "hex": "#fcbe00"},
+      {"id": 233, "name": "V4017A NEW", "material": "Vải", "hex": "#472878"},
+      {"id": 234, "name": "V4017A", "material": "Vải", "hex": "#502d85"},
+      {"id": 235, "name": "V4019A NEW", "material": "Vải", "hex": "#2d2363"},
+      {"id": 236, "name": "V4019A 129211", "material": "Vải", "hex": "#403387"},
+      {"id": 237, "name": "V5105 129211", "material": "Vải", "hex": "#432e85"},
+      {"id": 238, "name": "Y1103 0252", "material": "Vải", "hex": "#b36800"},
+      {"id": 239, "name": "B3128 0252", "material": "Đai", "hex": "#0a2e63"},
+      {"id": 240, "name": "B3133 129211", "material": "Đai", "hex": "#0c2d6e"},
+      {"id": 241, "name": "R2128 0252", "material": "Vải", "hex": "#570d12"},
+      {"id": 242, "name": "R2129 0252", "material": "Vải", "hex": "#7d0d2a"},
+      {"id": 243, "name": "ZD-2R 129211", "material": "Vải", "hex": "#f58200"},
+      {"id": 244, "name": "N-6GL 129211", "material": "Vải", "hex": "#005232"},
+      {"id": 245, "name": "R01 129211", "material": "Vải", "hex": "#1c2121"},
+      {"id": 246, "name": "N-FG 129211", "material": "Vải", "hex": "#004a3f"},
+      {"id": 247, "name": "IZD-B 129211 - 001", "material": "Vải", "hex": "#b31448"},
+      {"id": 248, "name": "ZD-5HR 129211", "material": "Vải", "hex": "#f59b00"},
+      {"id": 249, "name": "N-6L 129211", "material": "Vải", "hex": "#0c613e"},
+      {"id": 250, "name": "P4020G 129211", "material": "Vải", "hex": "#212b33"},
+      {"id": 251, "name": "B3014A 129211 [01]", "material": "Đai", "hex": "#0c3b6e"},
+      {"id": 252, "name": "B3001A 129211 [01]", "material": "Đai", "hex": "#082e5c"},
+      {"id": 253, "name": "Y1132", "material": "Vải", "hex": "#f55e00"},
+      {"id": 254, "name": "G4109", "material": "Vải", "hex": "#1d7348"},
+      {"id": 255, "name": "R2319 129211", "material": "Vải", "hex": "#8c4d61"},
+      {"id": 256, "name": "P7303 129211", "material": "Vải", "hex": "#404d54"},
+      {"id": 257, "name": "R2103 0252", "material": "Vải", "hex": "#a80044"},
+      {"id": 258, "name": "ZD NEW", "material": "Vải", "hex": "#1e2426"},
+      {"id": 259, "name": "Y6102C TEI8670", "material": "Vải", "hex": "#e6c20b"},
+      {"id": 260, "name": "Y6103C TEI8670", "material": "Vải", "hex": "#f59e0b"},
+      {"id": 261, "name": "Y6105C TEI8670", "material": "Vải", "hex": "#fae00f"},
+      {"id": 262, "name": "Y8101D NEW", "material": "Vải", "hex": "#d48e02"},
+      {"id": 263, "name": "Y8102D NEW", "material": "Vải", "hex": "#a13c00"},
+      {"id": 264, "name": "Y8102D TEI8670", "material": "Vải", "hex": "#9e3300"},
+      {"id": 265, "name": "Y8103D NEW", "material": "Vải", "hex": "#ad3700"},
+      {"id": 266, "name": "Y8105D NEW", "material": "Vải", "hex": "#e0a100"},
+      {"id": 267, "name": "Y8105D TEI8670", "material": "Vải", "hex": "#ebad00"},
+      {"id": 268, "name": "Y8107D NEW", "material": "Vải", "hex": "#faeb0f"},
+      {"id": 269, "name": "Y8115D TEI8670", "material": "Vải", "hex": "#9e3d00"},
+      {"id": 270, "name": "Y8118D NEW", "material": "Vải", "hex": "#f5d400"},
+      {"id": 271, "name": "Y8119D NEW", "material": "Vải", "hex": "#f57800"},
+      {"id": 272, "name": "Y8121D NEW", "material": "Vải", "hex": "#fce80d"},
+      {"id": 273, "name": "Y8125D NEW", "material": "Vải", "hex": "#ebd202"}
+    ];
+
+    let APP_PASSWORD = localStorage.getItem('APP_PASSWORD') || "260390";
+    const STORAGE_KEY = 'COLOR_MANAGER_DATA';
+    const HIDDEN_STORAGE_KEY = 'COLOR_MANAGER_HIDDEN_DATA';
+    const BG_STORAGE_KEY = 'COLOR_MANAGER_BG';
+
+    const imageLoader = document.getElementById('imageLoader');
+    const imageCanvas = document.getElementById('imageCanvas');
+    const ctx = imageCanvas.getContext('2d');
+    const colorSwatch = document.getElementById('colorSwatch');
+    const colorStatusText = document.getElementById('colorStatusText');
+    const colorNameInput = document.getElementById('colorName');
+    const colorMaterialSelect = document.getElementById('colorMaterial');
+    const paletteContainer = document.getElementById('paletteContainer');
+    const compareContainer = document.getElementById('compareContainer');
+    const searchInput = document.getElementById('searchInput');
+    const materialFilter = document.getElementById('materialFilter');
+    const sortSelect = document.getElementById('sortSelect');
+
+    let colors = [];
+    let hiddenColors = [];
+    let compareList = []; // Mảng chứa ID các màu đang so sánh theo thứ tự
+    let selectedHex = '#1877F2';
+    
+    let isTintsVisible = true;
+
+    function toggleTintsDisplay() {
+      isTintsVisible = !isTintsVisible;
+      const container = document.getElementById('compareContainer');
+      const btn = document.getElementById('btnToggleTints');
+      const text = document.getElementById('toggleTintsText');
+      const icon = document.getElementById('toggleTintsIcon');
+
+      if (isTintsVisible) {
+        container.classList.remove('hide-tints');
+        btn.classList.remove('active');
+        text.innerText = 'Ẩn màu nhạt';
+        icon.innerText = '🎨';
+        showToast('👁️ Đã hiện dải màu nhạt');
+      } else {
+        container.classList.add('hide-tints');
+        btn.classList.add('active');
+        text.innerText = 'Hiện màu nhạt';
+        icon.innerText = '👁️‍🗨️';
+        showToast('🙈 Đã thu nhỏ/ẩn dải màu nhạt');
+      }
+    }
+
+    let isGlobalEditMode = false;
+    let isDeleteMode = false;
+    let isHideMode = false;
+
+    function switchTab(tabNumber) {
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById(`tabBtn${i}`).classList.remove('active');
+        document.getElementById(`tabContent${i}`).classList.remove('active');
+      }
+      document.getElementById(`tabBtn${tabNumber}`).classList.add('active');
+      document.getElementById(`tabContent${tabNumber}`).classList.add('active');
+      
+      if (tabNumber === 1) renderPalette();
+      if (tabNumber === 3) renderHiddenPalette();
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerText = message;
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 2400);
+    }
+
+    function setCompareSize(size) {
+      compareContainer.classList.remove('size-sm', 'size-md', 'size-lg');
+      document.getElementById('sizeBtnSm').classList.remove('active');
+      document.getElementById('sizeBtnMd').classList.remove('active');
+      document.getElementById('sizeBtnLg').classList.remove('active');
+
+      if (size === 'sm') {
+        compareContainer.classList.add('size-sm');
+        document.getElementById('sizeBtnSm').classList.add('active');
+      } else if (size === 'lg') {
+        compareContainer.classList.add('size-lg');
+        document.getElementById('sizeBtnLg').classList.add('active');
+      } else {
+        compareContainer.classList.add('size-md');
+        document.getElementById('sizeBtnMd').classList.add('active');
+      }
+    }
+
+    function changePassword() {
+      const oldP = document.getElementById('oldPass').value;
+      const newP = document.getElementById('newPass').value;
+      if (oldP !== APP_PASSWORD) return alert('❌ Mật khẩu hiện tại không đúng!');
+      if (newP.length < 3) return alert('❌ Mật khẩu mới cần ít nhất 3 ký tự!');
+      APP_PASSWORD = newP;
+      localStorage.setItem('APP_PASSWORD', APP_PASSWORD);
+      document.getElementById('oldPass').value = '';
+      document.getElementById('newPass').value = '';
+      showToast('✅ Đã đổi mật khẩu bảo mật thành công!');
+    }
+
+    function verifyPassword(actionName) {
+      const inputPass = prompt(`🔑 Nhập mật khẩu để [${actionName}]:`);
+      if (inputPass === APP_PASSWORD) return true;
+      if (inputPass !== null) alert("❌ Mật khẩu không chính xác!");
+      return false;
+    }
+
+    function applyBackground(bgValue) {
+      document.body.style.background = `linear-gradient(rgba(10, 15, 30, 0.75), rgba(10, 15, 30, 0.75)), url('${bgValue}') no-repeat center center fixed`;
+      document.body.style.backgroundSize = 'cover';
+    }
+
+    function setBackgroundFromUrl() {
+      if (!verifyPassword("thay đổi hình nền bằng URL")) return;
+      const url = document.getElementById('bgUrlInput').value.trim();
+      if (url) { 
+        applyBackground(url); 
+        localStorage.setItem(BG_STORAGE_KEY, url); 
+        showToast('✅ Đã đổi hình nền từ URL!');
+      }
+    }
+
+    function triggerBgUpload() {
+      if (verifyPassword("thay đổi hình nền từ máy")) {
+        document.getElementById('bgUploader').click();
+      }
+    }
+
+    function setBackgroundFromFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        applyBackground(e.target.result);
+        localStorage.setItem(BG_STORAGE_KEY, e.target.result);
+        showToast('✅ Đã tải ảnh nền mới!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetBackground() {
+      if (!verifyPassword("khôi phục hình nền mặc định")) return;
+      localStorage.removeItem(BG_STORAGE_KEY);
+      applyBackground('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=2070&auto=format&fit=crop');
+      showToast('🔄 Đã khôi phục hình nền mặc định!');
+    }
+
+    function loadSavedBackground() {
+      const savedBg = localStorage.getItem(BG_STORAGE_KEY);
+      if (savedBg) applyBackground(savedBg);
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+      imageCanvas.width = 0; 
+      imageCanvas.height = 0;
+      imageLoader.value = '';
+      showToast('🗑️ Đã xóa ảnh khỏi canvas');
+    }
+
+    function rgbToHex(r, g, b) {
+      return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+    }
+
+    function hexToRgb(hex) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) {
+        hex = hex.split('').map(x => x + x).join('');
+      }
+      const num = parseInt(hex, 16);
+      if (isNaN(num)) return { r: 0, g: 0, b: 0 };
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255
+      };
+    }
+
+    // Hàm pha trộn màu gốc với màu trắng để tạo độ nhạt (Factor: 0.8, 0.6, 0.4, 0.2)
+    function getTintHex(hex, factor) {
+      const rgb = hexToRgb(hex);
+      const r = Math.round(rgb.r * factor + 255 * (1 - factor));
+      const g = Math.round(rgb.g * factor + 255 * (1 - factor));
+      const b = Math.round(rgb.b * factor + 255 * (1 - factor));
+      return rgbToHex(r, g, b);
+    }
+
+    function renderImageToCanvas(imageSrc) {
+      const img = new Image();
+      img.onload = function() {
+        let w = img.width, h = img.height;
+        if (w > 800) { h = h * (800 / w); w = 800; }
+        imageCanvas.width = w; imageCanvas.height = h;
+        ctx.drawImage(img, 0, 0, w, h);
+      }
+      img.src = imageSrc;
+    }
+
+    imageLoader.addEventListener('change', function(e) {
+      if(!e.target.files[0]) return;
+      const reader = new FileReader();
+      reader.onload = (event) => renderImageToCanvas(event.target.result);
+      reader.readAsDataURL(e.target.files[0]);
+    });
+
+    window.addEventListener('paste', function(e) {
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+      for (let index in items) {
+        if (items[index].type.indexOf('image') !== -1) {
+          const reader = new FileReader();
+          reader.onload = (event) => renderImageToCanvas(event.target.result);
+          reader.readAsDataURL(items[index].getAsFile());
+          showToast('📋 Đã dán ảnh từ Clipboard!');
+          break;
+        }
+      }
+    });
+
+    imageCanvas.addEventListener('click', function(e) {
+      const rect = imageCanvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * (imageCanvas.width / rect.width);
+      const y = (e.clientY - rect.top) * (imageCanvas.height / rect.height);
+      const pixel = ctx.getImageData(x, y, 1, 1).data;
+      selectedHex = rgbToHex(pixel[0], pixel[1], pixel[2]);
+      colorSwatch.style.backgroundColor = selectedHex;
+      colorStatusText.innerText = "Đã chọn " + selectedHex;
+      showToast(`🎯 Lấy mã màu: ${selectedHex}`);
+    });
+
+    function loadFromLocalStorage() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      colors = saved ? JSON.parse(saved) : INITIAL_JSON_DATA;
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(colors));
+    }
+
+    function loadHiddenFromLocalStorage() {
+      const saved = localStorage.getItem(HIDDEN_STORAGE_KEY);
+      hiddenColors = saved ? JSON.parse(saved) : [];
+      updateHiddenBadge();
+    }
+
+    function saveHiddenToLocalStorage() {
+      localStorage.setItem(HIDDEN_STORAGE_KEY, JSON.stringify(hiddenColors));
+      updateHiddenBadge();
+    }
+
+    function updateHiddenBadge() {
+      const badge = document.getElementById('hiddenCountBadge');
+      if (badge) badge.innerText = `${hiddenColors.length} màu đã ẩn`;
+    }
+
+    function addColor() {
+      if (!verifyPassword("thêm màu mẫu mới")) return;
+      const name = colorNameInput.value.trim() || 'Màu mới';
+      const material = colorMaterialSelect.value;
+      const id = Date.now();
+      colors.unshift({ id, hex: selectedHex, name, material });
+      colorNameInput.value = '';
+      saveToLocalStorage();
+      showToast(`➕ Đã thêm mẫu màu: ${name}`);
+      switchTab(1);
+    }
+
+    function toggleGlobalEdit(status) {
+      if (status && !verifyPassword("chỉnh sửa")) return;
+      isGlobalEditMode = status;
+      document.getElementById('btnEnableEdit').style.display = status ? 'none' : 'inline-flex';
+      document.getElementById('btnDisableEdit').style.display = status ? 'inline-flex' : 'none';
+      renderPalette();
+    }
+
+    function toggleDeleteMode(status) {
+      if (status && !verifyPassword("xóa")) return;
+      isDeleteMode = status;
+      document.getElementById('btnEnableDelete').style.display = status ? 'none' : 'inline-flex';
+      document.getElementById('btnDisableDelete').style.display = status ? 'inline-flex' : 'none';
+      renderPalette();
+    }
+
+    function toggleHideMode(status) {
+      if (status && !verifyPassword("ẩn")) return;
+      isHideMode = status;
+      document.getElementById('btnEnableHide').style.display = status ? 'none' : 'inline-flex';
+      document.getElementById('btnDisableHide').style.display = status ? 'inline-flex' : 'none';
+      renderPalette();
+    }
+
+    function deleteSingleColor(id) {
+      colors = colors.filter(c => c.id !== id);
+      compareList = compareList.filter(item => item !== id);
+      saveToLocalStorage();
+      renderPalette();
+      renderCompare();
+      showToast('🗑️ Đã xóa mẫu màu');
+    }
+
+    function hideSingleColor(id) {
+      const color = colors.find(c => c.id === id);
+      if (!color) return;
+      colors = colors.filter(c => c.id !== id);
+      compareList = compareList.filter(item => item !== id);
+      hiddenColors.unshift(color);
+      saveToLocalStorage();
+      saveHiddenToLocalStorage();
+      renderPalette();
+      renderCompare();
+      showToast('📦 Đã chuyển mẫu màu vào Kho Ẩn');
+    }
+
+    function restoreColor(id) {
+      const color = hiddenColors.find(c => c.id === id);
+      if (!color) return;
+      hiddenColors = hiddenColors.filter(c => c.id !== id);
+      colors.unshift(color);
+      saveToLocalStorage();
+      saveHiddenToLocalStorage();
+      renderPalette();
+      renderHiddenPalette();
+      showToast(`✅ Đã khôi phục mẫu: ${color.name}`);
+    }
+
+    function updateColorName(id, newName) {
+      const color = colors.find(c => c.id === id);
+      if (color) {
+        color.name = newName.trim() || 'Màu';
+        saveToLocalStorage();
+        renderCompare();
+      }
+    }
+
+    function updateColorMaterial(id, newMat) {
+      const color = colors.find(c => c.id === id);
+      if (color) {
+        color.material = newMat;
+        saveToLocalStorage();
+        renderCompare();
+      }
+    }
+
+    function toggleCompare(id) {
+      const idx = compareList.indexOf(id);
+      if (idx > -1) {
+        compareList.splice(idx, 1);
+      } else {
+        compareList.push(id);
+      }
+      renderCompare();
+    }
+
+    function clearAllCompare() {
+      compareList = [];
+      renderCompare();
+      renderPalette();
+      showToast('🧹 Đã xóa tất cả màu so sánh');
+    }
+
+    /* KHU VỰC SO SÁNH MÀU: CÓ KÉO THẢ TÙY CHỈNH VỊ TRÍ & ĐỘ NHẠT */
+    let draggedItemIndex = null;
+
+    function renderCompare() {
+      compareContainer.innerHTML = '';
+      const selectedColors = compareList.map(id => colors.find(c => c.id === id)).filter(Boolean);
+
+      if (selectedColors.length === 0) {
+        compareContainer.innerHTML = `
+          <div style="padding: 40px; color: #94a3b8; margin: auto; font-size: 14px; font-weight: 700; text-align: center;">
+            👈 Tích chọn ô <b>"So sánh"</b> ở danh sách mẫu bên dưới để đưa màu vào đây (Có thể kéo thả để đổi vị trí)
+          </div>`;
+        return;
+      }
+
+      selectedColors.forEach((c, index) => {
+        const col = document.createElement('div');
+        col.className = 'compare-column';
+        col.setAttribute('draggable', 'true');
+        col.setAttribute('data-index', index);
+
+        // Sự kiện Kéo Thả (Drag & Drop)
+        col.addEventListener('dragstart', (e) => {
+          draggedItemIndex = index;
+          col.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+
+        col.addEventListener('dragend', () => {
+          col.classList.remove('dragging');
+          document.querySelectorAll('.compare-column').forEach(el => el.classList.remove('drag-over'));
+        });
+
+        col.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          col.classList.add('drag-over');
+        });
+
+        col.addEventListener('dragleave', () => {
+          col.classList.remove('drag-over');
+        });
+
+        col.addEventListener('drop', (e) => {
+          e.preventDefault();
+          col.classList.remove('drag-over');
+          if (draggedItemIndex !== null && draggedItemIndex !== index) {
+            // Đổi vị trí trong mảng compareList
+            const movedItem = compareList.splice(draggedItemIndex, 1)[0];
+            compareList.splice(index, 0, movedItem);
+            renderCompare();
+            showToast('🔄 Đã thay đổi vị trí so sánh!');
+          }
+        });
+
+        // Màu gốc
+        const mainColorBox = document.createElement('div');
+        mainColorBox.className = 'compare-main-color';
+        mainColorBox.style.backgroundColor = c.hex;
+        mainColorBox.innerHTML = `
+          <button class="remove-compare-btn" onclick="toggleCompare(${c.id})" title="Gỡ bỏ">✕</button>
+        `;
+        col.appendChild(mainColorBox);
+
+        // Khối độ nhạt (Tints: 80%, 60%, 40%, 20%)
+        const tintsBox = document.createElement('div');
+        tintsBox.className = 'compare-tints-container';
+
+        const tints = [
+          { percent: '80%', factor: 0.8 },
+          { percent: '60%', factor: 0.6 },
+          { percent: '40%', factor: 0.4 },
+          { percent: '20%', factor: 0.2 }
+        ];
+
+        tints.forEach(t => {
+          const tintHex = getTintHex(c.hex, t.factor);
+          const tintItem = document.createElement('div');
+          tintItem.className = 'tint-box';
+          tintItem.style.backgroundColor = tintHex;
+          tintItem.innerText = `${t.percent}`;
+          tintsBox.appendChild(tintItem);
+        });
+
+        col.appendChild(tintsBox);
+
+        // Chữ hiển thị tên màu nằm bên dưới khu vực màu so sánh
+        const infoLabel = document.createElement('div');
+        infoLabel.className = 'compare-info-label';
+        infoLabel.innerHTML = `<div class="compare-color-name">${c.name}</div>`;
+        col.appendChild(infoLabel);
+
+        compareContainer.appendChild(col);
+      });
+    }
+
+    function renderPalette() {
+      paletteContainer.innerHTML = '';
+      const azJumpBar = document.getElementById('azJumpBar');
+      azJumpBar.innerHTML = '';
+
+      const query = searchInput.value.toLowerCase().trim();
+      const materialVal = materialFilter.value;
+      const sortOption = sortSelect.value;
+
+      let filtered = colors.filter(c => {
+        const matchesName = c.name.toLowerCase().includes(query);
+        const matchesMat = (materialVal === 'ALL') || (c.material === materialVal) || (c.material === 'Cả hai');
+        return matchesName && matchesMat;
+      });
+
+      if (filtered.length === 0) {
+        paletteContainer.innerHTML = '<div style="text-align: center; color: #64748b; padding: 40px 10px; font-size: 14px; font-weight: 700;">Không tìm thấy mẫu màu phù hợp.</div>';
+        return;
+      }
+
+      filtered.sort((a, b) => {
+        if (sortOption === 'newest') return b.id - a.id;
+        if (sortOption === 'oldest') return a.id - b.id;
+        if (sortOption === 'name-asc') return a.name.localeCompare(b.name, 'vi');
+        if (sortOption === 'name-desc') return b.name.localeCompare(a.name, 'vi');
+        return 0;
+      });
+
+      const groups = {};
+      filtered.forEach(c => {
+        let firstChar = (c.name.trim().charAt(0) || '#').toUpperCase();
+        if (!/[A-Z]/.test(firstChar)) {
+          firstChar = '0-9 & Khác';
+        }
+        if (!groups[firstChar]) groups[firstChar] = [];
+        groups[firstChar].push(c);
+      });
+
+      const sortedKeys = Object.keys(groups).sort((a, b) => {
+        if (a === '0-9 & Khác') return 1;
+        if (b === '0-9 & Khác') return -1;
+        return a.localeCompare(b, 'vi');
+      });
+
+      sortedKeys.forEach(letter => {
+        const jumpBtn = document.createElement('a');
+        jumpBtn.className = 'az-letter-btn';
+        jumpBtn.innerText = letter;
+        jumpBtn.href = `#group-${letter.replace(/\s+/g, '-')}`;
+        azJumpBar.appendChild(jumpBtn);
+      });
+
+      sortedKeys.forEach(letter => {
+        const groupSec = document.createElement('div');
+        groupSec.className = 'letter-group-section';
+        groupSec.id = `group-${letter.replace(/\s+/g, '-')}`;
+
+        const groupHeader = document.createElement('div');
+        groupHeader.className = 'letter-group-header';
+        groupHeader.innerHTML = `
+          <span>Nhóm ${letter}</span>
+          <span class="letter-group-count">${groups[letter].length} màu</span>
+        `;
+        groupSec.appendChild(groupHeader);
+
+        const grid = document.createElement('div');
+        grid.className = `palette-grid ${isDeleteMode ? 'show-delete-btn' : ''} ${isHideMode ? 'show-hide-btn' : ''}`;
+
+        groups[letter].forEach(c => {
+          const card = document.createElement('div');
+          card.className = 'color-card';
+          
+          const isChecked = compareList.includes(c.id) ? 'checked' : '';
+
+          card.innerHTML = `
+            <button class="delete-card-btn" onclick="deleteSingleColor(${c.id})" title="Xóa mẫu màu này">✕</button>
+            <button class="hide-card-btn" onclick="hideSingleColor(${c.id})" title="Ẩn mẫu màu này">👁️</button>
+            <div class="color-box" style="background-color: ${c.hex}"></div>
+            <div class="color-info">
+              <label class="compare-checkbox">
+                <input type="checkbox" ${isChecked} onchange="toggleCompare(${c.id})"> So sánh
+              </label>
+              
+              <input type="text" class="small-name-input" value="${c.name}" 
+                     ${isGlobalEditMode ? '' : 'disabled'} 
+                     onchange="updateColorName(${c.id}, this.value)" title="${c.name}">
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        groupSec.appendChild(grid);
+        paletteContainer.appendChild(groupSec);
+      });
+    }
+
+    function renderHiddenPalette() {
+      const container = document.getElementById('hiddenPaletteContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const query = document.getElementById('searchHiddenInput')?.value.toLowerCase().trim() || '';
+
+      const filtered = hiddenColors.filter(c => c.name.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="color: #94a3b8; font-size: 13px; text-align: center; padding: 20px;">Không có mẫu màu ẩn nào.</div>';
+        return;
+      }
+
+      filtered.forEach(c => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; gap: 10px;';
+        row.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 24px; height: 24px; border-radius: 6px; background-color: ${c.hex}; border: 1px solid rgba(0,0,0,0.1);"></div>
+            <span style="font-weight: 700; font-size: 13px; color: #0f172a;">${c.name}</span>
+            <span style="font-size: 11px; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; color: #475569;">${c.material || 'Cả hai'}</span>
+          </div>
+          <button class="btn btn-secondary" style="min-height: 28px; padding: 2px 10px; font-size: 12px;" onclick="restoreColor(${c.id})">Khôi phục</button>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function restoreAllHidden() {
+      if (hiddenColors.length === 0) return showToast('Kho ẩn hiện đang trống');
+      colors = [...hiddenColors, ...colors];
+      hiddenColors = [];
+      saveToLocalStorage();
+      saveHiddenToLocalStorage();
+      renderPalette();
+      renderHiddenPalette();
+      showToast('✅ Đã khôi phục tất cả màu trong kho ẩn!');
+    }
+
+    function clearAllHidden() {
+      if (hiddenColors.length === 0) return showToast('Kho ẩn hiện đang trống');
+      if (!verifyPassword("xóa vĩnh viễn kho ẩn")) return;
+      hiddenColors = [];
+      saveHiddenToLocalStorage();
+      renderHiddenPalette();
+      showToast('🗑️ Đã xóa vĩnh viễn tất cả mẫu trong kho ẩn!');
+    }
+
+    function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(colors, null, 2));
+      const dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", `color_database_${Date.now()}.json`);
+      dlAnchorElem.click();
+      showToast('⬇️ Đã tải tập tin JSON sao lưu');
+    }
+
+    function triggerImportJson() {
+      if (verifyPassword("nạp tập tin JSON")) {
+        document.getElementById('importFile').click();
+      }
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            colors = imported;
+            saveToLocalStorage();
+            renderPalette();
+            showToast('⬆️ Nhập dữ liệu JSON thành công!');
+          } else {
+            alert('File JSON không đúng định dạng mẫu!');
+          }
+        } catch (err) {
+          alert('Lỗi đọc file JSON!');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function exportCSS() {
+      let cssContent = "/* CSS Color Variables Exported From COLOR DIGITAL */\n:root {\n";
+      colors.forEach(c => {
+        const varName = `--color-${c.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+        cssContent += `  ${varName}: ${c.hex}; /* ${c.material || 'Cả hai'} */\n`;
+      });
+      cssContent += "}\n";
+
+      const dataStr = "data:text/css;charset=utf-8," + encodeURIComponent(cssContent);
+      const dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", "colors.css");
+      dlAnchorElem.click();
+      showToast('🎨 Đã xuất tập tin colors.css');
+    }
+
+    // Khởi tạo ứng dụng
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedBackground();
+      loadFromLocalStorage();
+      loadHiddenFromLocalStorage();
+      renderPalette();
+      renderCompare();
+    });
+  </script>
+</body>
+</html>
