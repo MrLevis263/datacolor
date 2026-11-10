@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BEST PACIFIC COLOR - Hệ Thống Quản Lý & So Sánh Màu Sắc</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); }
+        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.5); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(107, 114, 128, 0.8); }
+        .color-checkered-bg {
+            background-color: #f1f5f9;
+            background-image: linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
+                              linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #e2e8f0 75%),
+                              linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+            background-size: 12px 12px;
+            background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+        }
+        .dark .color-checkered-bg {
+            background-color: #0f172a;
+            background-image: linear-gradient(45deg, #1e293b 25%, transparent 25%),
+                              linear-gradient(-45deg, #1e293b 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #1e293b 75%),
+                              linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+        }
+        .app-bg-banner {
+            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.96)), url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        html:not(.dark) .app-bg-banner {
+            background-image: linear-gradient(to bottom, rgba(241, 245, 249, 0.90), rgba(248, 250, 252, 0.96)), url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 dark:bg-slate-900 dark:text-slate-100 min-h-full font-sans transition-colors duration-200 flex flex-col app-bg-banner">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-3 right-3 left-3 sm:left-auto z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-slate-900/95 dark:bg-slate-900/95 bg-white/95 backdrop-blur-md border-b border-slate-800 dark:border-slate-800 border-slate-200 shadow-sm">
+        <div class="w-full max-w-full px-2.5 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between py-2 md:h-20 gap-2.5">
+                
+                <!-- App Title Top-Left -->
+                <div class="flex items-center justify-between w-full md:w-auto flex-shrink-0">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-cyan-500 via-brand-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-brand-500/30">
+                            <i class="fa-solid fa-swatchbook text-lg sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-black text-base sm:text-2xl tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+                                <span class="bg-gradient-to-r from-cyan-500 via-brand-500 to-indigo-500 dark:from-cyan-400 dark:via-brand-400 dark:to-indigo-300 bg-clip-text text-transparent">BEST PACIFIC COLOR</span>
+                            </h1>
+                            <div class="text-[10px] sm:text-xs leading-none mt-0.5">
+                                <span class="text-brand-600 dark:text-cyan-400 font-black tracking-wider">V231780</span>
+                                <span class="text-slate-700 dark:text-slate-300 font-extrabold ml-1.5">Made by LVS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile-Only Action Controls -->
+                    <div class="flex items-center gap-1 md:hidden">
+                        <button onclick="toggleDayNightMode()" class="p-1.5 rounded-lg bg-slate-800/80 dark:bg-slate-800/80 bg-slate-200 text-amber-400 dark:text-amber-400 text-indigo-600 text-xs">
+                            <i id="day-night-icon-mobile" class="fa-solid fa-sun"></i>
+                        </button>
+                        <button onclick="openPasswordConfigModal()" class="p-1.5 rounded-lg bg-slate-800/80 dark:bg-slate-800/80 bg-slate-200 text-slate-200 dark:text-slate-200 text-slate-700 text-xs">
+                            <i class="fa-solid fa-key"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 MAIN TABS NAVIGATION (Scrollable horizontally on mobile) -->
+                <div class="w-full md:w-auto overflow-x-auto no-scrollbar py-0.5">
+                    <div class="flex bg-slate-800/90 dark:bg-slate-800/90 bg-slate-200 p-1 rounded-xl border border-slate-700/80 dark:border-slate-700 border-slate-300 w-max mx-auto md:w-auto gap-1">
+                        <button id="nav-tab-1" onclick="switchTab(1)" class="px-2.5 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-extrabold transition-all flex items-center gap-1.5 bg-slate-700 dark:bg-slate-700 bg-white text-slate-900 dark:text-white shadow-sm whitespace-nowrap">
+                            <i class="fa-solid fa-cubes text-brand-500 dark:text-cyan-400 text-xs"></i>
+                            <span>Thư Viện & So Sánh</span>
+                        </button>
+                        <button id="nav-tab-4" onclick="switchTab(4)" class="px-2.5 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-extrabold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-flask-vial text-cyan-400 text-xs"></i>
+                            <span>Thuốc Nhuộm</span>
+                        </button>
+                        <button id="nav-tab-2" onclick="switchTab(2)" class="px-2.5 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-extrabold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-plus-circle text-emerald-500 text-xs"></i>
+                            <span>Thêm Màu</span>
+                        </button>
+                        <button id="nav-tab-3" onclick="switchTab(3)" class="px-2.5 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-extrabold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap uppercase">
+                            <i class="fa-solid fa-circle-info text-amber-400 text-xs"></i>
+                            <span>INFO</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Desktop Action Controls -->
+                <div class="hidden md:flex items-center gap-2 flex-shrink-0">
+                    <button onclick="toggleDayNightMode()" id="day-night-btn" class="p-2 rounded-lg bg-slate-800 dark:bg-slate-800 bg-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700 hover:bg-slate-300 text-amber-400 dark:text-amber-400 text-indigo-600 transition-all text-sm" title="Chuyển chế độ Ban Ngày / Ban Đêm">
+                        <i id="day-night-icon" class="fa-solid fa-sun"></i>
+                    </button>
+                    <button onclick="openPasswordConfigModal()" class="p-2 rounded-lg bg-slate-800 dark:bg-slate-800 bg-slate-200 hover:bg-slate-700 dark:hover:bg-slate-700 hover:bg-slate-300 text-slate-200 dark:text-slate-200 text-slate-700 transition-all text-sm" title="Cấu hình mật khẩu quản trị">
+                        <i class="fa-solid fa-key"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="w-full max-w-full px-2 sm:px-6 lg:px-8 py-3 sm:py-6 flex-1 flex flex-col gap-4 sm:gap-6 relative">
+        
+        <!-- Watermark Background -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden flex items-start justify-center pt-24 opacity-5 dark:opacity-10 opacity-15 z-0 select-none">
+            <div class="text-center">
+                <span class="text-4xl sm:text-8xl md:text-9xl font-black tracking-widest uppercase bg-gradient-to-r from-brand-500 via-indigo-500 to-cyan-400 bg-clip-text text-transparent block">
+                    Best Pacific
+                </span>
+                <span class="text-xs sm:text-2xl font-bold tracking-[0.2em] uppercase text-slate-400 block mt-1">
+                    Textile Ltd — One-Stop Solutions Provider
+                </span>
+            </div>
+        </div>
+
+        <!-- ================= TAB 1: THƯ VIỆN & SO SÁNH ================= -->
+        <div id="tab-content-1" class="space-y-4 sm:space-y-6 relative z-10">
+            
+            <!-- STICKY COMPARISON BOARD -->
+            <section class="sticky top-24 md:top-20 z-20 bg-slate-800/95 dark:bg-slate-800/95 bg-white/95 backdrop-blur-md p-3 sm:p-4 rounded-2xl border border-slate-700/80 dark:border-slate-700/80 border-slate-300 shadow-xl space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-700/60 dark:border-slate-700 border-slate-200 pb-2.5">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-cyan-500 via-brand-500 to-purple-600 text-white flex items-center justify-center font-bold shadow-md">
+                            <i class="fa-solid fa-code-compare text-xs sm:text-base"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-black text-sm sm:text-lg bg-gradient-to-r from-cyan-500 via-brand-600 to-purple-600 dark:from-cyan-400 dark:via-brand-400 dark:to-purple-400 bg-clip-text text-transparent tracking-tight">
+                                Bảng So Sánh Màu
+                            </h3>
+                            <p class="text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 font-medium hidden sm:block">Kéo thả để đổi vị trí, bật dải màu nhạt khi cần.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between sm:justify-end gap-1.5 flex-wrap">
+                        <!-- Size Control Switches -->
+                        <div class="flex items-center bg-slate-900 dark:bg-slate-900 bg-slate-100 p-0.5 rounded-lg border border-slate-700 dark:border-slate-700 border-slate-300 text-[10px]">
+                            <button id="size-btn-sm" onclick="setCompareSize('sm')" class="px-2 py-0.5 rounded-md font-bold text-slate-600 dark:text-slate-400">Nhỏ</button>
+                            <button id="size-btn-md" onclick="setCompareSize('md')" class="px-2 py-0.5 rounded-md font-bold text-slate-600 dark:text-slate-400">Vừa</button>
+                            <button id="size-btn-lg" onclick="setCompareSize('lg')" class="px-2 py-0.5 rounded-md font-bold bg-brand-600 text-white shadow-sm">Lớn</button>
+                        </div>
+
+                        <!-- Tints Toggle Button -->
+                        <button id="toggle-tints-btn" onclick="toggleTintsVisibility()" class="px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-600 transition-all flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-palette text-brand-600 dark:text-brand-400"></i>
+                            <span id="tints-btn-text">Dải Màu Nhạt</span>
+                        </button>
+
+                        <span id="compare-count-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">0 màu</span>
+                        <button onclick="clearCompareList()" class="px-2 py-1 rounded-lg text-[10px] sm:text-xs font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900 transition-all">
+                            <i class="fa-solid fa-broom"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Combined Comparison Board Container -->
+                <div id="compare-board-wrapper" class="w-full bg-slate-50 dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-300 dark:border-slate-700 shadow-inner p-1">
+                    <div id="compare-board-seamless" class="flex w-full overflow-x-auto no-scrollbar">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Tints Section -->
+                <div id="tints-panel" class="hidden bg-slate-50/95 dark:bg-slate-900/95 p-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1.5">
+                        <h4 class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-brand-600 dark:text-brand-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-layer-group"></i> Dải Màu Nhạt Pha Trắng (20% - 80%)
+                        </h4>
+                    </div>
+
+                    <div id="tints-board-container" class="flex w-full overflow-x-auto gap-1 no-scrollbar">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filters & Toolbar -->
+            <section class="bg-white/95 dark:bg-slate-800/90 backdrop-blur-md p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg flex flex-col gap-3">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="search-input" oninput="handleSearch()" placeholder="Tìm Mã màu (VD: Y1001A, R2012A, B3025A)..." 
+                            class="w-full pl-9 pr-8 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 placeholder-slate-500 font-semibold">
+                        <button id="search-clear" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+
+                    <!-- Actions Controls -->
+                    <div class="flex items-center justify-between sm:justify-end gap-2">
+                        <button onclick="protectedAction(executeClearAllColors, 'Xóa toàn bộ thư viện màu')" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-800 transition-all flex items-center gap-1" title="Xóa tất cả (Cần mật khẩu)">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i>
+                            <span>Xóa Tất Cả</span>
+                        </button>
+
+                        <button onclick="resetDefaultColors()" class="px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 transition-all flex items-center gap-1" title="Khôi phục mặc định">
+                            <i class="fa-solid fa-rotate-left text-[10px]"></i>
+                            <span>Gốc</span>
+                        </button>
+
+                        <!-- Sắp xếp -->
+                        <select id="sort-select" onchange="handleSortChange()" class="py-1.5 px-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[11px] font-bold text-slate-800 dark:text-slate-200 focus:outline-none">
+                            <option value="code-asc" selected>Mã (A-Z)</option>
+                            <option value="code-desc">Mã (Z-A)</option>
+                            <option value="lightness-desc">Sáng -> Tối</option>
+                            <option value="lightness-asc">Tối -> Sáng</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Category Tabs -->
+                <div class="flex items-center gap-1 overflow-x-auto no-scrollbar border-t border-slate-200 dark:border-slate-700/50 pt-2.5">
+                    <button onclick="setCategory('all')" id="cat-btn-all" class="cat-tab px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap bg-brand-600 text-white shadow-sm transition-all">
+                        Tất cả (<span id="cat-count-all">0</span>)
+                    </button>
+                    <button onclick="setCategory('yellow')" id="cat-btn-yellow" class="cat-tab px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 transition-all flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-amber-400"></span> Vàng (Y) (<span id="cat-count-yellow">0</span>)
+                    </button>
+                    <button onclick="setCategory('red')" id="cat-btn-red" class="cat-tab px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 transition-all flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-rose-500"></span> Đỏ/Hồng/Tím (<span id="cat-count-red">0</span>)
+                    </button>
+                    <button onclick="setCategory('blue')" id="cat-btn-blue" class="cat-tab px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 transition-all flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span> Xanh Dương (<span id="cat-count-blue">0</span>)
+                    </button>
+                    <button onclick="setCategory('other')" id="cat-btn-other" class="cat-tab px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 transition-all flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-600"></span> Đen/Khác (<span id="cat-count-other">0</span>)
+                    </button>
+                </div>
+            </section>
+
+            <!-- Borderless Color Grid Container -->
+            <section id="color-display-container" class="min-h-[250px] bg-white/95 dark:bg-slate-800/90 backdrop-blur-md p-2.5 sm:p-3 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg"></section>
+        </div>
+
+
+        <!-- ================= TAB 2: THÊM MÀU MẪU ================= -->
+        <div id="tab-content-2" class="hidden space-y-4 sm:space-y-6">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+                <!-- Left: Form Add New Color -->
+                <div class="lg:col-span-5 bg-white/95 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg space-y-4">
+                    <div class="border-b border-slate-200 dark:border-slate-700 pb-2.5">
+                        <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-plus-circle text-brand-500"></i> Thêm Mã Màu Mới
+                            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-bold"><i class="fa-solid fa-lock"></i> Bảo vệ</span>
+                        </h3>
+                        <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">Nhập thông tin mã màu để lưu trữ (Cần mật khẩu xác nhận).</p>
+                    </div>
+
+                    <form id="add-color-form" onsubmit="event.preventDefault(); protectedAction(submitAddColorForm, 'Thêm mã màu mới');" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Mã Màu (Color Code / ID)</label>
+                            <input type="text" id="add-code" required placeholder="Ví dụ: Y1001A NEW hoặc R2012A" class="w-full px-3 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Chọn Mẫu Màu (Color Picker)</label>
+                            <div class="flex gap-2 items-center">
+                                <input type="color" id="add-color-picker" value="#0284c7" class="h-10 w-full rounded-xl cursor-pointer border-0 bg-transparent p-0">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Phân Nhóm Nhận Diện</label>
+                            <select id="add-category" class="w-full px-3 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100">
+                                <option value="yellow">Vàng (Y)</option>
+                                <option value="red">Đỏ / Hồng / Tím (R/V)</option>
+                                <option value="blue">Xanh Dương (B)</option>
+                                <option value="other">Khác / Đen / Lá (BK/G/P/C/W/ZD)</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" class="w-full py-2.5 rounded-xl font-bold text-xs bg-brand-600 hover:bg-brand-700 text-white shadow-md transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-lock"></i>
+                                <i class="fa-solid fa-save"></i> Lưu Mã Màu Vào Hệ Thống
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right: Image Eyedropper & Match Analyzer -->
+                <div class="lg:col-span-7 bg-white/95 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg space-y-4">
+                    <div class="border-b border-slate-200 dark:border-slate-700 pb-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white flex items-center gap-2">
+                                <i class="fa-solid fa-eye-dropper text-brand-500"></i> Trích Xuất & Tìm Mã Màu Từ Ảnh
+                            </h3>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">Tải ảnh mẫu vải, chạm vào điểm màu trên ảnh để tìm mã gần nhất.</p>
+                        </div>
+
+                        <label class="cursor-pointer inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-bold text-xs transition-all flex-shrink-0">
+                            <i class="fa-solid fa-upload"></i> Chọn Ảnh Mẫu
+                            <input type="file" id="img-upload-input" accept="image/*" onchange="handleImageUpload(event)" class="hidden">
+                        </label>
+                    </div>
+
+                    <!-- Canvas Interactive Dropzone -->
+                    <div id="image-drop-zone" class="relative w-full min-h-[220px] bg-slate-100 dark:bg-slate-900 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex flex-col items-center justify-center overflow-hidden p-3 transition-all">
+                        <div id="img-placeholder" class="text-center p-4 space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 text-brand-500 flex items-center justify-center mx-auto text-base">
+                                <i class="fa-solid fa-image"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-xs text-slate-800 dark:text-slate-200">Chạm hoặc tải ảnh mẫu vào đây</p>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400">Hỗ trợ PNG, JPG, WEBP</p>
+                            </div>
+                        </div>
+
+                        <canvas id="analyzer-canvas" class="hidden cursor-crosshair max-w-full h-auto rounded-lg shadow-md border border-slate-300 dark:border-slate-700" onclick="pickColorFromCanvas(event)"></canvas>
+                    </div>
+
+                    <!-- Analysis Match Output -->
+                    <div id="match-results-box" class="hidden bg-slate-100 dark:bg-slate-900 p-3 rounded-xl border border-slate-300 dark:border-slate-700 space-y-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-white dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-center">
+                                <span class="text-[9px] font-bold uppercase text-slate-500 block mb-1">Màu lấy từ ảnh</span>
+                                <div class="w-full h-9 rounded color-checkered-bg p-0.5">
+                                    <div id="picked-color-swatch" class="w-full h-full rounded"></div>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 p-2 rounded-lg border border-brand-500/50 text-center">
+                                <span class="text-[9px] font-bold uppercase text-brand-600 block mb-1">Mã trùng khớp nhất</span>
+                                <div class="w-full h-9 rounded color-checkered-bg p-0.5 mb-0.5">
+                                    <div id="matched-color-swatch" class="w-full h-full rounded"></div>
+                                </div>
+                                <span id="matched-code-label" class="text-xs font-black block text-slate-900 dark:text-white truncate">---</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= TAB 4: THÔNG TIN THUỐC NHUỘM ================= -->
+        <div id="tab-content-4" class="hidden space-y-4 sm:space-y-6">
+            <!-- Header Tab 4 -->
+            <div class="bg-white/95 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-xl space-y-2">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-tr from-cyan-500 via-teal-500 to-emerald-500 text-white flex items-center justify-center text-base sm:text-xl shadow-md">
+                            <i class="fa-solid fa-vial-circle-check"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base sm:text-xl font-black text-slate-900 dark:text-white flex items-center gap-1.5">
+                                Thông Tin Thuốc Nhuộm
+                                <span class="text-[9px] px-2 py-0.5 rounded-full font-bold bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300">Quy Chuẩn</span>
+                            </h2>
+                            <p class="text-[11px] text-slate-600 dark:text-slate-400">Tra cứu đặc điểm mã số, ứng dụng loại vải & điều kiện kỹ thuật.</p>
+                        </div>
+                    </div>
+
+                    <!-- Search Filter for Dyes -->
+                    <div class="relative w-full sm:w-auto min-w-[200px]">
+                        <i class="fa-solid fa-filter absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="dye-search-input" oninput="filterDyeCards()" placeholder="Lọc loại thuốc nhuộm..." 
+                            class="w-full pl-8 pr-3 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-slate-100 focus:outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dye Cards Grid -->
+            <div id="dye-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+
+                <!-- Card 1: Acid & Metal -->
+                <div class="dye-card bg-white/95 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg overflow-hidden flex flex-col justify-between hover:border-cyan-500 transition-all duration-300">
+                    <div class="p-4 sm:p-6 space-y-3">
+                        <div class="flex items-start justify-between border-b border-slate-100 dark:border-slate-700/80 pb-2">
+                            <div class="space-y-0.5">
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">Mã 1, 2, 3, 4, 5</span>
+                                <h3 class="font-black text-base sm:text-lg text-slate-900 dark:text-white">
+                                    1. Thuốc nhuộm Acid & Metal
+                                </h3>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-900/30 text-purple-600 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                <i class="fa-solid fa-atom"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <div class="bg-slate-50 dark:bg-slate-900/80 p-2.5 rounded-xl space-y-1 border border-slate-100 dark:border-slate-800">
+                                <span class="font-bold text-purple-600 dark:text-purple-400 uppercase text-[9px] block flex items-center gap-1">
+                                    <i class="fa-solid fa-barcode"></i> Đặc Điểm Mã Số:
+                                </span>
+                                <p class="text-slate-700 dark:text-slate-300 font-medium">Bắt đầu là các số <strong>1, 2, 3, 4, 5</strong>.</p>
+                                <ul class="list-disc pl-4 space-y-0.5 text-slate-600 dark:text-slate-400">
+                                    <li>Đuôi <strong>"A"</strong>: Thuốc nhuộm Acid.</li>
+                                    <li>Đuôi <strong>"G"</strong>: Thuốc nhuộm Metal.</li>
+                                </ul>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-shirt text-brand-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Ứng dụng:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Nhuộm <strong>vải Nylon</strong>.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-temperature-arrow-up text-amber-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Điều kiện & Cách pha:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Lên màu ở nhiệt độ cao. Pha bằng nước nóng <strong>90°C</strong>.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2 pt-0.5">
+                                <i class="fa-solid fa-clock-history text-rose-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Hạn sử dụng:</strong>
+                                    <span class="text-rose-600 dark:text-rose-400 font-bold"> Dùng trong 72 giờ</span> (Acid).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Cation (Code 6) -->
+                <div class="dye-card bg-white/95 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg overflow-hidden flex flex-col justify-between hover:border-cyan-500 transition-all duration-300">
+                    <div class="p-4 sm:p-6 space-y-3">
+                        <div class="flex items-start justify-between border-b border-slate-100 dark:border-slate-700/80 pb-2">
+                            <div class="space-y-0.5">
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800">Mã 6...C</span>
+                                <h3 class="font-black text-base sm:text-lg text-slate-900 dark:text-white">
+                                    2. Thuốc nhuộm Cation
+                                </h3>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-cyan-50 dark:bg-cyan-900/30 text-cyan-600 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <div class="bg-slate-50 dark:bg-slate-900/80 p-2.5 rounded-xl space-y-1 border border-slate-100 dark:border-slate-800">
+                                <span class="font-bold text-cyan-600 dark:text-cyan-400 uppercase text-[9px] block flex items-center gap-1">
+                                    <i class="fa-solid fa-barcode"></i> Đặc Điểm Mã Số:
+                                </span>
+                                <p class="text-slate-700 dark:text-slate-300 font-medium">Bắt đầu là <strong>số "6"</strong> và kết thúc bằng <strong>chữ "C"</strong>.</p>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-shirt text-brand-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Ứng dụng:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Nhuộm <strong>vải CDP</strong>.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-temperature-arrow-up text-amber-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Điều kiện & Cách pha:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Pha bằng nước nóng <strong>90°C</strong>.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Reactive Acid (Code 7) -->
+                <div class="dye-card bg-white/95 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg overflow-hidden flex flex-col justify-between hover:border-cyan-500 transition-all duration-300">
+                    <div class="p-4 sm:p-6 space-y-3">
+                        <div class="flex items-start justify-between border-b border-slate-100 dark:border-slate-700/80 pb-2">
+                            <div class="space-y-0.5">
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-950/80 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">Mã 7...H</span>
+                                <h3 class="font-black text-base sm:text-lg text-slate-900 dark:text-white">
+                                    3. Thuốc nhuộm Acid hoạt tính
+                                </h3>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-900/30 text-rose-600 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                <i class="fa-solid fa-fire-flame-curved"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <div class="bg-slate-50 dark:bg-slate-900/80 p-2.5 rounded-xl space-y-1 border border-slate-100 dark:border-slate-800">
+                                <span class="font-bold text-rose-600 dark:text-rose-400 uppercase text-[9px] block flex items-center gap-1">
+                                    <i class="fa-solid fa-barcode"></i> Đặc Điểm Mã Số:
+                                </span>
+                                <p class="text-slate-700 dark:text-slate-300 font-medium">Bắt đầu là <strong>số "7"</strong> và kết thúc bằng <strong>chữ "H"</strong>.</p>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-shirt text-brand-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Ứng dụng:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Nhuộm <strong>vải Nylon</strong>.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-temperature-arrow-up text-amber-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Điều kiện & Cách pha:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Pha ở <strong>90°C</strong>.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Disperse (Code 8) -->
+                <div class="dye-card bg-white/95 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg overflow-hidden flex flex-col justify-between hover:border-cyan-500 transition-all duration-300">
+                    <div class="p-4 sm:p-6 space-y-3">
+                        <div class="flex items-start justify-between border-b border-slate-100 dark:border-slate-700/80 pb-2">
+                            <div class="space-y-0.5">
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">Mã 8...D</span>
+                                <h3 class="font-black text-base sm:text-lg text-slate-900 dark:text-white">
+                                    4. Thuốc nhuộm phân tán
+                                </h3>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-900/30 text-amber-600 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                <i class="fa-solid fa-wind"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <div class="bg-slate-50 dark:bg-slate-900/80 p-2.5 rounded-xl space-y-1 border border-slate-100 dark:border-slate-800">
+                                <span class="font-bold text-amber-600 dark:text-amber-400 uppercase text-[9px] block flex items-center gap-1">
+                                    <i class="fa-solid fa-barcode"></i> Đặc Điểm Mã Số:
+                                </span>
+                                <p class="text-slate-700 dark:text-slate-300 font-medium">Bắt đầu là <strong>số "8"</strong> và kết thúc bằng <strong>chữ "D"</strong>.</p>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-shirt text-brand-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Ứng dụng:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Nhuộm <strong>vải Polyester</strong>.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-water text-cyan-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Điều kiện & Cách pha:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Pha ở <strong>45°C</strong> (nước ấm/dung dịch).</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2 pt-0.5">
+                                <i class="fa-solid fa-clock-history text-rose-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Hạn sử dụng:</strong>
+                                    <span class="text-rose-600 dark:text-rose-400 font-bold"> Dùng trong 48 giờ</span>.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Reactive Cotton (Code 9) -->
+                <div class="dye-card bg-white/95 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-lg overflow-hidden flex flex-col justify-between hover:border-cyan-500 transition-all duration-300">
+                    <div class="p-4 sm:p-6 space-y-3">
+                        <div class="flex items-start justify-between border-b border-slate-100 dark:border-slate-700/80 pb-2">
+                            <div class="space-y-0.5">
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">Mã 9...H</span>
+                                <h3 class="font-black text-base sm:text-lg text-slate-900 dark:text-white">
+                                    5. Thuốc nhuộm bông hoạt tính
+                                </h3>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                <i class="fa-solid fa-plant-wilt"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <div class="bg-slate-50 dark:bg-slate-900/80 p-2.5 rounded-xl space-y-1 border border-slate-100 dark:border-slate-800">
+                                <span class="font-bold text-emerald-600 dark:text-emerald-400 uppercase text-[9px] block flex items-center gap-1">
+                                    <i class="fa-solid fa-barcode"></i> Đặc Điểm Mã Số:
+                                </span>
+                                <p class="text-slate-700 dark:text-slate-300 font-medium">Bắt đầu là <strong>số "9"</strong> và kết thúc bằng <strong>chữ "H"</strong>.</p>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-shirt text-brand-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Ứng dụng:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Nhuộm <strong>sợi bông (Cotton)</strong>.</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-temperature-half text-emerald-500 mt-0.5 text-xs"></i>
+                                <div>
+                                    <strong class="text-slate-900 dark:text-slate-200">Cách pha chế:</strong>
+                                    <span class="text-slate-700 dark:text-slate-300"> Pha ở <strong>nhiệt độ phòng</strong>.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Summary Table -->
+            <div class="bg-white/95 dark:bg-slate-800/90 backdrop-blur-md p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-xl space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+                    <h3 class="font-black text-xs sm:text-sm text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-table-list text-cyan-500"></i> Bảng Tra Cứu Nhanh Thuốc Nhuộm
+                    </h3>
+                </div>
+
+                <div class="overflow-x-auto no-scrollbar">
+                    <table class="w-full text-left text-xs border-collapse min-w-[550px]">
+                        <thead>
+                            <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-100/70 dark:bg-slate-900/70 text-slate-700 dark:text-slate-300 font-extrabold uppercase text-[9px]">
+                                <th class="p-2.5 rounded-l-xl">Loại Thuốc Nhuộm</th>
+                                <th class="p-2.5">Đặc Điểm Mã</th>
+                                <th class="p-2.5">Vải Ứng Dụng</th>
+                                <th class="p-2.5">Nhiệt Độ Pha</th>
+                                <th class="p-2.5 rounded-r-xl">Hạn Sử Dụng</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700/50 font-medium text-slate-800 dark:text-slate-200 text-[11px]">
+                            <tr>
+                                <td class="p-2.5 font-bold text-purple-600 dark:text-purple-400">1. Acid & Metal</td>
+                                <td class="p-2.5">1..5 (A: Acid / G: Metal)</td>
+                                <td class="p-2.5 font-semibold">Nylon</td>
+                                <td class="p-2.5">Nước nóng <strong>90°C</strong></td>
+                                <td class="p-2.5 font-bold text-rose-500">Acid: 72 giờ</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-bold text-cyan-600 dark:text-cyan-400">2. Cation</td>
+                                <td class="p-2.5">Đầu: "6", Đuôi: "C"</td>
+                                <td class="p-2.5 font-semibold">CDP</td>
+                                <td class="p-2.5">Nước nóng <strong>90°C</strong></td>
+                                <td class="p-2.5 text-slate-400">Theo quy chuẩn</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-bold text-rose-600 dark:text-rose-400">3. Acid hoạt tính</td>
+                                <td class="p-2.5">Đầu: "7", Đuôi: "H"</td>
+                                <td class="p-2.5 font-semibold">Nylon</td>
+                                <td class="p-2.5">Pha <strong>90°C</strong></td>
+                                <td class="p-2.5 text-slate-400">Theo quy chuẩn</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-bold text-amber-600 dark:text-amber-400">4. Phân tán</td>
+                                <td class="p-2.5">Đầu: "8", Đuôi: "D"</td>
+                                <td class="p-2.5 font-semibold">Polyester</td>
+                                <td class="p-2.5">Nước ấm <strong>45°C</strong></td>
+                                <td class="p-2.5 font-bold text-rose-500">48 giờ</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">5. Bông hoạt tính</td>
+                                <td class="p-2.5">Đầu: "9", Đuôi: "H"</td>
+                                <td class="p-2.5 font-semibold">Cotton</td>
+                                <td class="p-2.5">Nhiệt độ phòng</td>
+                                <td class="p-2.5 text-slate-400">Theo quy chuẩn</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= TAB 3: INFORMATION ================= -->
+        <div id="tab-content-3" class="hidden space-y-4 sm:space-y-6">
+            <div class="max-w-4xl mx-auto bg-white/95 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-700/60 shadow-xl overflow-hidden">
+                <!-- Header Banner -->
+                <div class="bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600 p-5 sm:p-8 text-white relative">
+                    <div class="relative z-10 space-y-1.5">
+                        <span class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-white/20 backdrop-blur-md">Phiên bản V261102.01</span>
+                        <h2 class="text-xl sm:text-2xl font-black">BEST PACIFIC COLOR</h2>
+                        <p class="text-xs text-white/80">Ứng dụng chuẩn hóa danh mục màu, tra cứu thông tin thuốc nhuộm & so sánh trực quan.</p>
+                    </div>
+                </div>
+
+                <!-- Developer & User Info Card -->
+                <div class="p-4 sm:p-8 space-y-4 sm:space-y-6">
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">Thông Tin Quản Lý System</h3>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                            <div class="bg-slate-100 dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-brand-500 text-white font-black flex items-center justify-center text-base shadow-md">
+                                    <i class="fa-solid fa-user-gear"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400 block">Họ và Tên</span>
+                                    <span class="text-sm font-black text-slate-900 dark:text-white">Mr Levi'S</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-100 dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-500 text-white font-black flex items-center justify-center text-base shadow-md">
+                                    <i class="fa-solid fa-id-badge"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400 block">Mã Nhân Viên</span>
+                                    <span class="text-sm font-black text-slate-900 dark:text-white">V231780</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-100 dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-purple-500 text-white font-black flex items-center justify-center text-base shadow-md">
+                                    <i class="fa-solid fa-building-user"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400 block">Phòng Ban</span>
+                                    <span class="text-sm font-black text-slate-900 dark:text-white">LTB - Đai</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal: Password Authorization -->
+    <div id="modal-password" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-sm w-full p-4 sm:p-6 space-y-3">
+            <div class="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto text-lg">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="text-center">
+                <h3 class="font-black text-sm sm:text-base text-slate-900 dark:text-white">Xác Nhận Mật Khẩu</h3>
+                <p id="password-action-desc" class="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                    Nhập mật khẩu quản trị để xác nhận.
+                </p>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); verifyAndExecutePassword();" class="space-y-3">
+                <input type="password" id="input-password-auth" required placeholder="Mật khẩu" class="w-full px-3 py-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-bold text-center focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100">
+                <p id="password-error-msg" class="text-[10px] font-bold text-rose-500 text-center hidden">Mật khẩu không chính xác!</p>
+                <div class="flex items-center justify-end gap-2 pt-1">
+                    <button type="button" onclick="closePasswordModal()" class="w-1/2 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">Hủy</button>
+                    <button type="submit" class="w-1/2 py-2 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-sm">Xác Nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Password Configuration -->
+    <div id="modal-config-pass" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-sm w-full p-4 sm:p-6 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-2">
+                <h3 class="font-black text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-key text-brand-500"></i> Đổi Mật Khẩu Quản Trị
+                </h3>
+                <button onclick="closePasswordConfigModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); saveNewAdminPassword();" class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Mật khẩu hiện tại</label>
+                    <input type="password" id="input-current-pass" required placeholder="Nhập mật khẩu cũ" class="w-full px-3 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">Mật khẩu mới</label>
+                    <input type="password" id="input-new-pass" required placeholder="Nhập mật khẩu mới" class="w-full px-3 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-slate-100">
+                </div>
+                <div class="pt-1">
+                    <button type="submit" class="w-full py-2 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-sm">Cập Nhật Mật Khẩu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Inspect Color Code Details -->
+    <div id="modal-inspect" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 max-w-sm w-full overflow-hidden transform scale-95 transition-transform duration-200">
+            <div id="modal-color-preview" class="h-36 w-full relative color-checkered-bg flex items-end p-3 justify-between">
+                <button onclick="closeInspectModal()" class="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center backdrop-blur-sm">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+
+            <div class="p-4 space-y-3">
+                <div>
+                    <div class="flex items-center justify-between">
+                        <h2 id="modal-color-code" class="text-base sm:text-lg font-black text-slate-900 dark:text-white">---</h2>
+                        <span id="modal-category-badge" class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 uppercase">---</span>
+                    </div>
+                </div>
+
+                <div class="pt-1 flex gap-2">
+                    <button id="modal-btn-compare" onclick="" class="flex-1 py-2 rounded-xl bg-brand-50 dark:bg-brand-950/50 hover:bg-brand-100 text-brand-700 dark:text-brand-300 font-bold text-xs flex items-center justify-center gap-1.5 border border-brand-200 dark:border-brand-800">
+                        <i class="fa-solid fa-code-compare"></i> So Sánh
+                    </button>
+                    <button id="modal-btn-delete" onclick="" class="py-2 px-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 text-rose-600 dark:text-rose-400 font-bold text-xs flex items-center justify-center gap-1 border border-rose-200 dark:border-rose-800">
+                        <i class="fa-solid fa-trash-can text-[10px]"></i> Xóa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        const MASTER_COLORS_DATA = [
+            // Page 1
+            { code: "Y1001A NEW", hex: "#E6CF00", cat: "yellow" },
+            { code: "Y1003A NEW", hex: "#FFC800", cat: "yellow" },
+            { code: "Y1004G NEW", hex: "#C88200", cat: "yellow" },
+            { code: "Y1005G NEW", hex: "#A66200", cat: "yellow" },
+            { code: "Y1007A NEW", hex: "#E66800", cat: "yellow" },
+            { code: "Y1008A NEW", hex: "#E67E00", cat: "yellow" },
+            { code: "Y1009A NEW", hex: "#FFB300", cat: "yellow" },
+            { code: "Y1013A NEW", hex: "#FFDA00", cat: "yellow" },
+            { code: "Y1013A 129211", hex: "#FFE100", cat: "yellow" },
+            { code: "Y1014A NEW", hex: "#FFA500", cat: "yellow" },
+            { code: "Y1014A 129211", hex: "#FFAF00", cat: "yellow" },
+            { code: "Y1016A NEW", hex: "#FFC400", cat: "yellow" },
+            { code: "Y1017A NEW", hex: "#B87300", cat: "yellow" },
+            { code: "Y1018A 129211", hex: "#FFA028", cat: "yellow" },
+            { code: "Y1019A NEW", hex: "#FFC000", cat: "yellow" },
+            { code: "Y1020A NEW", hex: "#E05A00", cat: "yellow" },
+            { code: "Y1021A NEW", hex: "#993D00", cat: "yellow" },
+            { code: "Y1023A 129211", hex: "#E6C200", cat: "yellow" },
+            { code: "Y1024G 122089", hex: "#A33300", cat: "yellow" },
+            { code: "Y1026G NEW", hex: "#A86B00", cat: "yellow" },
+            { code: "Y1028A NEW", hex: "#FFFF00", cat: "yellow" },
+            { code: "Y1028A 129211", hex: "#E6FF00", cat: "yellow" },
+            { code: "Y1030G 129211", hex: "#FFCE00", cat: "yellow" },
+            { code: "Y1031A NEW", hex: "#FFEE00", cat: "yellow" },
+            { code: "Y1031A 129211", hex: "#FFF000", cat: "yellow" },
+            { code: "Y1034A NEW", hex: "#FFC800", cat: "yellow" },
+            { code: "Y1034A 129211", hex: "#FFD000", cat: "yellow" },
+            { code: "Y1046G 129211", hex: "#8B4500", cat: "yellow" },
+            { code: "Y1047G NEW", hex: "#935100", cat: "yellow" },
+            { code: "Y1047G 129211", hex: "#8B4900", cat: "yellow" },
+            { code: "Y1103 129211", hex: "#B87000", cat: "yellow" },
+            { code: "Y1104 NEW", hex: "#B36B00", cat: "yellow" },
+            { code: "Y1104 129211", hex: "#B87000", cat: "yellow" },
+            { code: "Y1108 129211", hex: "#A85E00", cat: "yellow" },
+            { code: "Y1314 129211 - 001", hex: "#FF6A00", cat: "yellow" },
+            { code: "Y1115 129211", hex: "#FF5500", cat: "yellow" },
+            { code: "Y1120 129211", hex: "#B87000", cat: "yellow" },
+            { code: "Y1121 129211", hex: "#A85E00", cat: "yellow" },
+            { code: "Y1126 [01]", hex: "#FFC000", cat: "yellow" },
+            { code: "Y1130 129211", hex: "#8B4500", cat: "yellow" },
+            { code: "Y7101H NEW", hex: "#FFD700", cat: "yellow" },
+            { code: "Y7102H NEW", hex: "#CD3700", cat: "yellow" },
+            { code: "Y7107H 129211", hex: "#FFD700", cat: "yellow" },
+            { code: "Y7113H NEW", hex: "#FFA500", cat: "yellow" },
+
+            // Reds & Purples
+            { code: "R2001A NEW", hex: "#991C2E", cat: "red" },
+            { code: "R2001A 129211", hex: "#881827", cat: "red" },
+            { code: "R2003A NEW", hex: "#8B1331", cat: "red" },
+            { code: "R2003A 129211", hex: "#C21E56", cat: "red" },
+            { code: "R2005A NEW", hex: "#730927", cat: "red" },
+            { code: "R2005A 129211 [01]", hex: "#63051F", cat: "red" },
+            { code: "R2006A NEW", hex: "#7E0C3E", cat: "red" },
+            { code: "R2006A 129211", hex: "#8C124B", cat: "red" },
+            { code: "R2007G 129211", hex: "#B35252", cat: "red" },
+            { code: "R2008G NEW", hex: "#611016", cat: "red" },
+            { code: "R2008G 129211", hex: "#70151C", cat: "red" },
+            { code: "R2009A NEW", hex: "#870533", cat: "red" },
+            { code: "R2009A 129211", hex: "#FF007F", cat: "red" },
+            { code: "R2011A NEW", hex: "#D83018", cat: "red" },
+            { code: "R2011A 129211", hex: "#CD2810", cat: "red" },
+            { code: "R2012A NEW", hex: "#8E0812", cat: "red" },
+            { code: "R2012A 129211", hex: "#B5111B", cat: "red" },
+            { code: "R2013A NEW", hex: "#291217", cat: "red" },
+            { code: "R2014A NEW", hex: "#8F2251", cat: "red" },
+            { code: "R2014A 129211", hex: "#A3225C", cat: "red" },
+            { code: "R2015A NEW", hex: "#780F25", cat: "red" },
+            { code: "R2015A 129211", hex: "#82102A", cat: "red" },
+            { code: "R2021A 129211", hex: "#B82E51", cat: "red" },
+            { code: "R2022G 129211", hex: "#A34149", cat: "red" },
+            { code: "R2027A NEW", hex: "#A8133C", cat: "red" },
+            { code: "R2027A 129211", hex: "#BA234D", cat: "red" },
+            { code: "R2028A NEW", hex: "#6E0B28", cat: "red" },
+            { code: "R2028A 129211", hex: "#780D2C", cat: "red" },
+            { code: "R2030A NEW", hex: "#5E0F3D", cat: "red" },
+            { code: "R2030A 129211", hex: "#6A1347", cat: "red" },
+            { code: "R2031A 129211", hex: "#3B1325", cat: "red" },
+            { code: "R2032A 129211", hex: "#4A0F21", cat: "red" },
+            { code: "R2033G 129211", hex: "#8A1A24", cat: "red" },
+            { code: "R2034G NEW", hex: "#4E0E18", cat: "red" },
+            { code: "R2034G 129211", hex: "#5E101D", cat: "red" },
+            { code: "R2035A NEW", hex: "#4A0E18", cat: "red" },
+            { code: "R2035G 129211", hex: "#590F1C", cat: "red" },
+            { code: "R2035A 129050", hex: "#520C1A", cat: "red" },
+            { code: "R2039A NEW", hex: "#A81944", cat: "red" },
+            { code: "R2039A 129211", hex: "#B5204C", cat: "red" },
+            { code: "R2040A 129211", hex: "#6B1135", cat: "red" },
+            { code: "R2043A NEW", hex: "#A1081C", cat: "red" },
+            { code: "R2043A 129211", hex: "#FF0066", cat: "red" },
+            { code: "R2044A NEW", hex: "#5C0D26", cat: "red" },
+            { code: "R2044A 129211", hex: "#6E0E2E", cat: "red" },
+            { code: "R2045A NEW", hex: "#850C16", cat: "red" },
+            { code: "R2045A 129211", hex: "#940F19", cat: "red" },
+            { code: "R2046A 129211", hex: "#AA2053", cat: "red" },
+            { code: "R2049A NEW", hex: "#610A1D", cat: "red" },
+            { code: "R2049A 129211", hex: "#9B435F", cat: "red" },
+            { code: "R2053A 129211", hex: "#732B41", cat: "red" },
+            { code: "R2054A NEW", hex: "#8F0B13", cat: "red" },
+            { code: "R2054A 129211", hex: "#A30F19", cat: "red" },
+            { code: "R2063A NEW", hex: "#B82352", cat: "red" },
+            { code: "R2063A 129211", hex: "#B51B4B", cat: "red" },
+            { code: "R2064G NEW", hex: "#4F0E1E", cat: "red" },
+            { code: "R2064G 129211", hex: "#3B0915", cat: "red" },
+            { code: "R2101 129211", hex: "#750F28", cat: "red" },
+            { code: "R2102 129211", hex: "#5E0A16", cat: "red" },
+            { code: "R2104 NEW", hex: "#7C0A3E", cat: "red" },
+            { code: "R2104 129211", hex: "#820942", cat: "red" },
+            { code: "R2106 129211", hex: "#590A22", cat: "red" },
+            { code: "R2107 129211", hex: "#6B1017", cat: "red" },
+            { code: "R2108 129211", hex: "#570910", cat: "red" },
+            { code: "R2109 129211", hex: "#6B0E23", cat: "red" },
+            { code: "R2110 129211", hex: "#4F0D1C", cat: "red" },
+            { code: "R2112 129211", hex: "#871822", cat: "red" },
+            { code: "R2114 129211", hex: "#66102B", cat: "red" },
+            { code: "R2121 NEW", hex: "#2D1119", cat: "red" },
+            { code: "R2121 129211", hex: "#33101C", cat: "red" },
+            { code: "R2124 129211", hex: "#B01925", cat: "red" },
+            { code: "R2130 129211", hex: "#E33D19", cat: "red" },
+            { code: "R2131 NEW", hex: "#610C13", cat: "red" },
+            { code: "R2132 129211", hex: "#B31C28", cat: "red" },
+            { code: "R2142 129211", hex: "#A8134E", cat: "red" },
+            { code: "R2146 129211", hex: "#B00E20", cat: "red" },
+            { code: "R7201H NEW", hex: "#A30F39", cat: "red" },
+            { code: "R7202H NEW", hex: "#A6123D", cat: "red" },
+            { code: "R7207H NEW", hex: "#B81825", cat: "red" },
+            { code: "R7209H NEW", hex: "#990D32", cat: "red" },
+            { code: "R7210H 129211", hex: "#780D2D", cat: "red" },
+            { code: "R7212H", hex: "#96101E", cat: "red" },
+
+            // Blues
+            { code: "B3001A NEW", hex: "#03336B", cat: "blue" },
+            { code: "B3001A 129211", hex: "#256FB3", cat: "blue" },
+            { code: "B3003A 129211", hex: "#0C3F8A", cat: "blue" },
+            { code: "B3004A NEW", hex: "#0059A3", cat: "blue" },
+            { code: "B3004A 129211", hex: "#0075C4", cat: "blue" },
+            { code: "B3005A NEW", hex: "#006280", cat: "blue" },
+            { code: "B3005A 129211", hex: "#008FB3", cat: "blue" },
+            { code: "B3006G NEW", hex: "#101924", cat: "blue" },
+            { code: "B3006G 129211", hex: "#223342", cat: "blue" },
+            { code: "B3008A 129211", hex: "#124296", cat: "blue" },
+            { code: "B3014A NEW", hex: "#022B5C", cat: "blue" },
+            { code: "B3014A 129211", hex: "#1C508A", cat: "blue" },
+            { code: "B3021A 129211", hex: "#194B9C", cat: "blue" },
+            { code: "B3022G NEW", hex: "#101924", cat: "blue" },
+            { code: "B3022G 129211", hex: "#152233", cat: "blue" },
+            { code: "B3023A 122089-H082 ACID", hex: "#103050", cat: "blue" },
+            { code: "B3024G 129211", hex: "#101B2B", cat: "blue" },
+            { code: "B3025A NEW", hex: "#083296", cat: "blue" },
+            { code: "B3025A 129211", hex: "#1153B8", cat: "blue" },
+            { code: "B3026A NEW", hex: "#071D4D", cat: "blue" },
+            { code: "B3026A 129211", hex: "#082763", cat: "blue" },
+            { code: "B3027G NEW", hex: "#0D131C", cat: "blue" },
+            { code: "B3027G 129211", hex: "#111A29", cat: "blue" },
+            { code: "B3028A NEW", hex: "#004C63", cat: "blue" },
+            { code: "B3028A 129211", hex: "#007294", cat: "blue" },
+            { code: "B3031A 129211", hex: "#003AA8", cat: "blue" },
+            { code: "B3034A NEW", hex: "#0082AD", cat: "blue" },
+            { code: "B3034A 129211", hex: "#008EB8", cat: "blue" },
+            { code: "B3035A NEW", hex: "#043B80", cat: "blue" },
+            { code: "B3035A 129211", hex: "#0D4C96", cat: "blue" },
+            { code: "B3036A 129211", hex: "#10213B", cat: "blue" },
+            { code: "B3038A NEW", hex: "#004854", cat: "blue" },
+            { code: "B3038A 129211", hex: "#006878", cat: "blue" },
+            { code: "B3041A 129211", hex: "#083E9E", cat: "blue" },
+            { code: "B3042A NEW", hex: "#042B59", cat: "blue" },
+            { code: "B3042A 129211", hex: "#004185", cat: "blue" },
+            { code: "B3048A 129211", hex: "#0B2342", cat: "blue" },
+            { code: "B3052A 129211", hex: "#06277D", cat: "blue" },
+            { code: "B3055G NEW", hex: "#101924", cat: "blue" },
+            { code: "B3055G 129211", hex: "#172333", cat: "blue" },
+            { code: "B3071A NEW", hex: "#0A388A", cat: "blue" },
+            { code: "B3103 129211", hex: "#121B2B", cat: "blue" },
+            { code: "B3106 129211", hex: "#151E29", cat: "blue" },
+            { code: "B3110 129211", hex: "#10337A", cat: "blue" },
+            { code: "B3111 129211", hex: "#123A82", cat: "blue" },
+            { code: "B3112 129211", hex: "#0091B8", cat: "blue" },
+            { code: "B3113 129211", hex: "#121921", cat: "blue" },
+            { code: "B3114 129211", hex: "#11367D", cat: "blue" },
+            { code: "B3124 129211", hex: "#111824", cat: "blue" },
+            { code: "B3125 129211", hex: "#06338A", cat: "blue" },
+            { code: "B3128 129211", hex: "#0E3980", cat: "blue" },
+            { code: "B3129 129211", hex: "#0C141F", cat: "blue" },
+            { code: "B3136 129211", hex: "#0B131C", cat: "blue" },
+            { code: "B3313 NEW", hex: "#0C3070", cat: "blue" },
+            { code: "B7301H NEW", hex: "#113C9E", cat: "blue" },
+            { code: "B7301H 129211", hex: "#0F3287", cat: "blue" },
+            { code: "B7302H NEW", hex: "#004754", cat: "blue" },
+            { code: "B7308H NEW", hex: "#101B2B", cat: "blue" },
+            { code: "B7311H NEW", hex: "#131E2B", cat: "blue" },
+
+            // Blacks, Greens, Neutrals, Violets & Acids
+            { code: "BK5002 NEW", hex: "#111818", cat: "other" },
+            { code: "BK5002 129211", hex: "#0D1414", cat: "other" },
+            { code: "G4010G 129211", hex: "#2D3323", cat: "other" },
+            { code: "G4024A 129211", hex: "#005C50", cat: "other" },
+            { code: "G4104 129211", hex: "#003A2E", cat: "other" },
+            { code: "G4108 129211", hex: "#1E7044", cat: "other" },
+            { code: "P4004G 129211", hex: "#232B33", cat: "other" },
+            { code: "P4005G 129211", hex: "#1A2129", cat: "other" },
+            { code: "P7101H 129211", hex: "#1C2229", cat: "other" },
+            { code: "P7102 129211", hex: "#171F26", cat: "other" },
+            { code: "P7103 129211", hex: "#1C242E", cat: "other" },
+            { code: "P7104 129211", hex: "#172129", cat: "other" },
+            { code: "V4007A NEW", hex: "#322B78", cat: "red" },
+            { code: "V4007A 129211", hex: "#2E266B", cat: "red" },
+            { code: "W5007A", hex: "#DDE2E8", cat: "other" },
+            { code: "BK9107", hex: "#1A2024", cat: "other" },
+            { code: "BK7508H 129211", hex: "#1C2329", cat: "other" },
+            { code: "C6104 [06]", hex: "#2B221E", cat: "other" },
+            { code: "R2136 129211", hex: "#8C1342", cat: "red" },
+            { code: "R2140 129211 [01]", hex: "#4A0E18", cat: "red" },
+            { code: "R2143 129211", hex: "#B8121E", cat: "red" },
+            { code: "IZD-2B 129211", hex: "#8C133F", cat: "red" },
+            { code: "IZD-GX 129211", hex: "#820D3E", cat: "red" },
+            { code: "ZD-3G 129211", hex: "#005366", cat: "other" },
+            { code: "ZD-3HR 129211", hex: "#1142A0", cat: "other" },
+            { code: "ZD-5HG 129211", hex: "#FFC800", cat: "yellow" },
+            { code: "V4017A NEW", hex: "#442578", cat: "red" },
+            { code: "V4017A", hex: "#4C2982", cat: "red" },
+            { code: "V4019A NEW", hex: "#29225B", cat: "red" },
+            { code: "V4019A 129211", hex: "#332C6E", cat: "red" },
+            { code: "V5105 129211", hex: "#3C236E", cat: "red" },
+            { code: "Y1103 0252", hex: "#B87000", cat: "yellow" },
+            { code: "B3128 0252", hex: "#0E3980", cat: "blue" },
+            { code: "B3133 129211", hex: "#0B2D6B", cat: "blue" },
+            { code: "R2128 0252", hex: "#520910", cat: "red" },
+            { code: "R2129 0252", hex: "#780F2A", cat: "red" },
+            { code: "BK5014 129211", hex: "#11181A", cat: "other" },
+            { code: "BK5017 129211", hex: "#0E1517", cat: "other" },
+            { code: "BK5019 129211", hex: "#111818", cat: "other" },
+            { code: "BK5020 129211", hex: "#131A1C", cat: "other" },
+            { code: "BK5022 129211", hex: "#141C1E", cat: "other" },
+            { code: "BK5026 NEW", hex: "#12191B", cat: "other" },
+            { code: "BK5026 129211", hex: "#101718", cat: "other" },
+            { code: "BK5028 129211", hex: "#12191C", cat: "other" },
+            { code: "BK5030 NEW", hex: "#131A1B", cat: "other" },
+            { code: "BK5030 129211", hex: "#0F1517", cat: "other" },
+            { code: "BK7501H NEW", hex: "#1A2022", cat: "other" },
+            { code: "BK7506H NEW", hex: "#161C1E", cat: "other" },
+            { code: "BK7508H NEW", hex: "#182024", cat: "other" },
+            { code: "C4006G 129211", hex: "#332018", cat: "other" },
+            { code: "C4013G NEW", hex: "#3D211A", cat: "other" },
+            { code: "C4013G 129211", hex: "#4A271E", cat: "other" },
+            { code: "C4028G NEW", hex: "#1C1615", cat: "other" },
+            { code: "C4028 129211", hex: "#1F1918", cat: "other" },
+            { code: "C6102 129211", hex: "#2B2321", cat: "other" },
+            { code: "G4002A 129211", hex: "#004F46", cat: "other" },
+            { code: "G4003A 129211", hex: "#206E44", cat: "other" },
+            { code: "ZD-2R 129211", hex: "#F08200", cat: "yellow" },
+            { code: "N-6GL 129211", hex: "#004D2E", cat: "other" },
+            { code: "R01 129211", hex: "#1C2122", cat: "other" },
+            { code: "N-FG 129211", hex: "#004D3F", cat: "other" },
+            { code: "IZD-B 129211 - 001", hex: "#A81045", cat: "red" },
+            { code: "ZD-5HR 129211", hex: "#FF9900", cat: "yellow" },
+            { code: "N-6L 129211", hex: "#0E5230", cat: "other" },
+            { code: "P4020G 129211", hex: "#1F262B", cat: "other" },
+            { code: "B3014A 129211 [01]", hex: "#0A3B78", cat: "blue" },
+            { code: "B3001A 129211 [01]", hex: "#062E68", cat: "blue" },
+            { code: "Y1132", hex: "#FF5500", cat: "yellow" },
+            { code: "G4109", hex: "#116637", cat: "other" },
+            { code: "R2319 129211", hex: "#8A475C", cat: "red" },
+            { code: "P7303 129211", hex: "#4B5259", cat: "other" },
+            { code: "R2103 0252", hex: "#9E0B38", cat: "red" },
+            { code: "ZD NEW", hex: "#171C1E", cat: "other" },
+
+            // Pages 5 & 6
+            { code: "Y6102C TEI8670", hex: "#E6C200", cat: "yellow" },
+            { code: "Y6103C TEI8670", hex: "#FF9900", cat: "yellow" },
+            { code: "Y6105C TEI8670", hex: "#FFFF00", cat: "yellow" },
+            { code: "Y8101D NEW", hex: "#D49B00", cat: "yellow" },
+            { code: "Y8102D NEW", hex: "#993300", cat: "yellow" },
+            { code: "Y8102D TEI8670", hex: "#8B2500", cat: "yellow" },
+            { code: "Y8103D NEW", hex: "#A83800", cat: "yellow" },
+            { code: "Y8105D NEW", hex: "#E6B800", cat: "yellow" },
+            { code: "Y8105D TEI8670", hex: "#D4A000", cat: "yellow" },
+            { code: "Y8107D NEW", hex: "#FFFF00", cat: "yellow" },
+            { code: "Y8115D TEI8670", hex: "#993300", cat: "yellow" },
+            { code: "Y8118D NEW", hex: "#FFD700", cat: "yellow" },
+            { code: "Y8119D NEW", hex: "#FF7F00", cat: "yellow" },
+            { code: "Y8121D NEW", hex: "#FFFF00", cat: "yellow" },
+            { code: "Y8125D NEW", hex: "#FFC800", cat: "yellow" },
+            { code: "Y8128D NEW", hex: "#FFFF00", cat: "yellow" },
+            { code: "Y8128D", hex: "#E6FF00", cat: "yellow" },
+            { code: "Y8130D NEW", hex: "#8B2500", cat: "yellow" },
+            { code: "Y8130D TEI8670", hex: "#802000", cat: "yellow" },
+            { code: "Y8131D NEW", hex: "#8B2500", cat: "yellow" },
+            { code: "Y8132D NEW", hex: "#A83800", cat: "yellow" },
+            { code: "Y8136D NEW", hex: "#FF4500", cat: "yellow" },
+            { code: "Y8137D NEW", hex: "#B83200", cat: "yellow" },
+            { code: "Y8152D NEW", hex: "#8B2500", cat: "yellow" },
+            { code: "R2303 [01]", hex: "#8A1832", cat: "red" },
+            { code: "R6203C TEI8670", hex: "#A31A42", cat: "red" },
+            { code: "R6204C TEI8670", hex: "#FF007F", cat: "red" },
+            { code: "R6205C TEI8670", hex: "#A80B4A", cat: "red" },
+            { code: "R8201D NEW", hex: "#8F193B", cat: "red" },
+            { code: "R8202D TEI8670", hex: "#4A0C1B", cat: "red" },
+            { code: "R8204D NEW", hex: "#8A121A", cat: "red" },
+            { code: "R8205D TEI8670", hex: "#7A1237", cat: "red" },
+            { code: "R8206D NEW", hex: "#6E0F23", cat: "red" },
+            { code: "R8207D NEW", hex: "#850E18", cat: "red" },
+            { code: "R8208D NEW", hex: "#FF3366", cat: "red" },
+            { code: "R8209D-NEW", hex: "#E63A50", cat: "red" },
+            { code: "R8210D NEW", hex: "#590D1A", cat: "red" },
+            { code: "R8210D TEI8670", hex: "#610E1C", cat: "red" },
+            { code: "R8218D T3400819", hex: "#3B101C", cat: "red" },
+            { code: "R8218D TEI8670 [02]", hex: "#521226", cat: "red" },
+            { code: "R8221D TEI8670", hex: "#FF2B6A", cat: "red" },
+            { code: "R8222D NEW", hex: "#82121D", cat: "red" },
+            { code: "R8223D NEW", hex: "#B31C1A", cat: "red" },
+            { code: "R8228D NEW", hex: "#730F1C", cat: "red" },
+            { code: "R8229D NEW", hex: "#A31C38", cat: "red" },
+            { code: "R8229D T3400819", hex: "#9E141E", cat: "red" },
+            { code: "R8230D NEW", hex: "#8A1014", cat: "red" },
+            { code: "R8230D T3400819", hex: "#7A0A0E", cat: "red" },
+            { code: "R8230D TEI8670", hex: "#800F12", cat: "red" },
+            { code: "R8231D NEW", hex: "#B8221D", cat: "red" },
+            { code: "R8232D NEW", hex: "#3B0810", cat: "red" },
+            { code: "R8235D", hex: "#7D0D1B", cat: "red" },
+            { code: "R8252D NEW", hex: "#820E1C", cat: "red" },
+            { code: "R8255D NEW", hex: "#87121A", cat: "red" },
+            { code: "R2308 TEI8670", hex: "#9E1620", cat: "red" },
+            { code: "R2308 0333", hex: "#8E0E18", cat: "red" },
+            { code: "B3323 NEW", hex: "#0C246B", cat: "blue" },
+            { code: "B6303C TEI8670", hex: "#111E2E", cat: "blue" },
+            { code: "B6304C TEI8670", hex: "#0E297A", cat: "blue" },
+            { code: "B6305C TEI8670", hex: "#0A3B66", cat: "blue" },
+            { code: "B6306C TEI8670", hex: "#005266", cat: "blue" },
+            { code: "B8301D NEW [01]", hex: "#0F3375", cat: "blue" },
+            { code: "B8303D NEW", hex: "#0B1D3A", cat: "blue" },
+            { code: "B8303D TEI8670", hex: "#0F2342", cat: "blue" },
+            { code: "B8305D NEW", hex: "#0D2554", cat: "blue" },
+            { code: "B8306D NEW", hex: "#091426", cat: "blue" },
+            { code: "B8307D NEW", hex: "#006C8A", cat: "blue" },
+            { code: "B8308D NEW", hex: "#0D1826", cat: "blue" },
+            { code: "B8309D NEW", hex: "#0E2242", cat: "blue" },
+            { code: "B8309D TEI8670", hex: "#111C2B", cat: "blue" },
+            { code: "B8315D NEW", hex: "#122A5B", cat: "blue" },
+            { code: "B8315D TEI8670", hex: "#10234A", cat: "blue" },
+            { code: "B8317D NEW", hex: "#131C26", cat: "blue" },
+            { code: "B8316D NEW", hex: "#007A9E", cat: "blue" },
+            { code: "B8316D TEI8670", hex: "#2E82B3", cat: "blue" },
+            { code: "B8318D NEW", hex: "#083B80", cat: "blue" },
+            { code: "B8318D TEI8670", hex: "#0A3370", cat: "blue" },
+            { code: "B8320D NEW", hex: "#008BB8", cat: "blue" },
+            { code: "B8320D TEI8670", hex: "#007A9E", cat: "blue" },
+            { code: "B8323D NEW", hex: "#0A1F4D", cat: "blue" },
+            { code: "B8323D TEJ0932", hex: "#2B5780", cat: "blue" },
+            { code: "B8325D NEW", hex: "#007BA3", cat: "blue" },
+            { code: "B8326D T3400819", hex: "#0C1326", cat: "blue" },
+            { code: "B8326D NEW [01]", hex: "#0D215C", cat: "blue" },
+            { code: "B8327D NEW", hex: "#0B214A", cat: "blue" },
+            { code: "B8328D NEW", hex: "#0A2863", cat: "blue" },
+            { code: "B8328D TEI8670", hex: "#0B2352", cat: "blue" },
+            { code: "B8329D NEW", hex: "#0E1826", cat: "blue" },
+            { code: "B8329D TEI8670 [01]", hex: "#111C29", cat: "blue" },
+            { code: "B8332D NEW", hex: "#3B88A8", cat: "blue" },
+            { code: "B8334D NEW", hex: "#092142", cat: "blue" },
+            { code: "B8336D T3400819 [01]", hex: "#10161F", cat: "blue" },
+            { code: "B8336D NEW", hex: "#0B1A3A", cat: "blue" },
+            { code: "B8337D NEW", hex: "#0A2259", cat: "blue" },
+            { code: "B8345D NEW", hex: "#00648A", cat: "blue" },
+            { code: "B8346D", hex: "#0A388A", cat: "blue" },
+            { code: "B8348D NEW", hex: "#0D1826", cat: "blue" },
+            { code: "B8348D TEI8670", hex: "#0E1E33", cat: "blue" },
+            { code: "B8349D NEW", hex: "#0A2E70", cat: "blue" },
+            { code: "B8349D TEI8670", hex: "#083380", cat: "blue" },
+            { code: "B8355D TEI8670", hex: "#072A6B", cat: "blue" },
+            { code: "B8371D NEW", hex: "#0A2B66", cat: "blue" },
+            { code: "B8372D NEW", hex: "#0C1B2B", cat: "blue" },
+            { code: "B8373D NEW", hex: "#081B33", cat: "blue" },
+            { code: "B8374D NEW", hex: "#0A1726", cat: "blue" },
+            { code: "BK6501C TEI8670", hex: "#141A1C", cat: "other" },
+            { code: "BK6505C", hex: "#121819", cat: "other" },
+            { code: "BK6506C [01]", hex: "#101618", cat: "other" },
+            { code: "BK8801D NEW", hex: "#111718", cat: "other" },
+            { code: "BK8801D TEI8670", hex: "#151F24", cat: "other" },
+            { code: "BK8804D TEI8670", hex: "#13191B", cat: "other" },
+            { code: "BK8808D NEW", hex: "#12181A", cat: "other" },
+            { code: "BK8808D TEI8670", hex: "#101617", cat: "other" },
+            { code: "BK8809D NEW", hex: "#131A1C", cat: "other" },
+            { code: "BK8809D TEI8670", hex: "#111819", cat: "other" },
+            { code: "BK8810D NEW", hex: "#0D1314", cat: "other" },
+            { code: "BK8810D TEI8670", hex: "#101718", cat: "other" },
+            { code: "BK8812 NEW", hex: "#111718", cat: "other" },
+            { code: "BK8814D NEW", hex: "#12191B", cat: "other" },
+            { code: "BK8814D TEI8670", hex: "#141C1E", cat: "other" },
+            { code: "BK8817D TEI8670", hex: "#101617", cat: "other" },
+            { code: "BK8819D NEW", hex: "#12191B", cat: "other" },
+            { code: "V8405D T3400819", hex: "#3D133D", cat: "red" },
+            { code: "V8405D NEW [01]", hex: "#52144C", cat: "red" },
+            { code: "V8406D NEW", hex: "#3B2B73", cat: "red" },
+            { code: "V8409D NEW", hex: "#331333", cat: "red" },
+            { code: "V8411D NEW [01]", hex: "#8A237A", cat: "red" },
+            { code: "V8411D NEW", hex: "#9E1F8A", cat: "red" },
+            { code: "G8501D NEW", hex: "#023B1E", cat: "other" },
+            { code: "W8301 NEW", hex: "#BAC0CD", cat: "other" },
+            { code: "W8902D NEW", hex: "#C2C9D4", cat: "other" },
+            { code: "W8903D NEW", hex: "#E2E7EC", cat: "other" },
+            { code: "Y1307", hex: "#FFC800", cat: "yellow" },
+            { code: "Y8128D [01]", hex: "#FFFF00", cat: "yellow" },
+            { code: "Y1308.", hex: "#A84E00", cat: "yellow" },
+            { code: "Y1311", hex: "#C85A00", cat: "yellow" },
+            { code: "B3308 TEI8670", hex: "#0E1826", cat: "blue" },
+            { code: "B3312 TEI8670", hex: "#0D2B70", cat: "blue" },
+            { code: "BLUE AD-RC BEJ9807", hex: "#424D59", cat: "blue" },
+            { code: "ELASTIC 0333/10", hex: "#0A1B2B", cat: "blue" },
+            { code: "SDBS TEI8670", hex: "#11171A", cat: "other" },
+            { code: "R8203D", hex: "#4A0C22", cat: "red" },
+            { code: "Y8107D", hex: "#FFFF00", cat: "yellow" },
+            { code: "BK8822D", hex: "#1A2226", cat: "other" },
+            { code: "B8348D TEI8670 - 001", hex: "#0C1A2E", cat: "blue" },
+            { code: "Y1310 TEI8670", hex: "#FFFF00", cat: "yellow" },
+            { code: "Y1314 TEI8670", hex: "#FF7F00", cat: "yellow" },
+            { code: "Y1317 NEW", hex: "#8B2500", cat: "yellow" },
+            { code: "Y1319 TEI8670", hex: "#FF7F00", cat: "yellow" },
+            { code: "P7302 TEI8670", hex: "#21282E", cat: "other" },
+            { code: "P7301H TEI8670 [02]", hex: "#1D2329", cat: "other" },
+            { code: "R2317", hex: "#4A0C1A", cat: "red" },
+            { code: "B3308", hex: "#0C1726", cat: "blue" },
+            { code: "B3312 - 001", hex: "#0B1D59", cat: "blue" },
+            { code: "BK8812D TEI8670", hex: "#141C21", cat: "other" },
+            { code: "B8334D TEI8670", hex: "#0A254D", cat: "blue" },
+            { code: "B8371D TEI8670", hex: "#0A285C", cat: "blue" },
+            { code: "C6302 NEW", hex: "#3B2A23", cat: "other" },
+            { code: "R8206D", hex: "#8A2B43", cat: "red" },
+            { code: "R8229D TEI8670", hex: "#B8233C", cat: "red" }
+        ];
+
+        // State Variables
+        let allColors = [];
+        let compareList = [];
+        let currentCategory = 'all';
+        let currentSort = 'code-asc';
+        let searchQuery = '';
+        let loadedImage = null;
+        let compareSize = 'lg';
+        let showTints = false;
+        let isDayMode = false;
+
+        // Password State
+        let adminPassword = localStorage.getItem('colorpro_admin_pass') || '260390';
+        let pendingAction = null;
+        let draggedIndex = null;
+
+        window.onload = function() {
+            loadColorsData();
+            updateStats();
+            render();
+            updateCompareBoard();
+            setupDragAndDrop();
+        };
+
+        // Day / Night Mode Toggle
+        function toggleDayNightMode() {
+            isDayMode = !isDayMode;
+            const htmlEl = document.documentElement;
+            const body = document.body;
+            const btnIcon = document.getElementById('day-night-icon');
+            const btnIconMobile = document.getElementById('day-night-icon-mobile');
+
+            if (isDayMode) {
+                htmlEl.classList.remove('dark');
+                body.className = "bg-slate-100 text-slate-900 min-h-full font-sans transition-colors duration-200 flex flex-col app-bg-banner";
+                if(btnIcon) btnIcon.className = "fa-solid fa-moon text-indigo-600";
+                if(btnIconMobile) btnIconMobile.className = "fa-solid fa-moon text-indigo-600";
+            } else {
+                htmlEl.classList.add('dark');
+                body.className = "bg-slate-900 text-slate-100 min-h-full font-sans transition-colors duration-200 flex flex-col app-bg-banner";
+                if(btnIcon) btnIcon.className = "fa-solid fa-sun text-amber-400";
+                if(btnIconMobile) btnIconMobile.className = "fa-solid fa-sun text-amber-400";
+            }
+        }
+
+        // Tab Switching Engine
+        function switchTab(tabNum) {
+            [1, 2, 3, 4].forEach(n => {
+                const navBtn = document.getElementById(`nav-tab-${n}`);
+                const content = document.getElementById(`tab-content-${n}`);
+                if (!navBtn || !content) return;
+                
+                if (n === tabNum) {
+                    navBtn.className = "px-2.5 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-extrabold transition-all flex items-center gap-1.5 bg-slate-700 dark:bg-slate-700 bg-white text-slate-900 dark:text-white shadow-sm whitespace-nowrap";
+                    content.classList.remove('hidden');
+                } else {
+                    navBtn.className = "px-2.5 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-extrabold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-1.5 whitespace-nowrap";
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        function filterDyeCards() {
+            const query = (document.getElementById('dye-search-input')?.value || '').toLowerCase().trim();
+            const cards = document.querySelectorAll('.dye-card');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
+
+        function loadColorsData() {
+            const saved = localStorage.getItem('bpvn_master_list');
+            let rawList = saved ? JSON.parse(saved) : [...MASTER_COLORS_DATA];
+
+            allColors = rawList.map((c, index) => {
+                const rgb = hexToRgb(c.hex);
+                const lightness = calculateLightness(rgb.r, rgb.g, rgb.b);
+                return { id: index, ...c, rgb, lightness };
+            });
+        }
+
+        function saveColorsToStorage() {
+            const exportable = allColors.map(c => ({ code: c.code, hex: c.hex, cat: c.cat }));
+            localStorage.setItem('bpvn_master_list', JSON.stringify(exportable));
+            updateStats();
+        }
+
+        function hexToRgb(hex) {
+            let clean = hex.replace('#', '');
+            if(clean.length === 3) clean = clean.split('').map(x => x + x).join('');
+            const num = parseInt(clean, 16);
+            return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+        }
+
+        function calculateLightness(r, g, b) {
+            return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        }
+
+        function calculateColorDistance(rgb1, rgb2) {
+            return Math.sqrt(
+                Math.pow(rgb1.r - rgb2.r, 2) +
+                Math.pow(rgb1.g - rgb2.g, 2) +
+                Math.pow(rgb1.b - rgb2.b, 2)
+            );
+        }
+
+        function getTintHex(hex, percent) {
+            const rgb = hexToRgb(hex);
+            const r = Math.round(rgb.r + (255 - rgb.r) * percent);
+            const g = Math.round(rgb.g + (255 - rgb.g) * percent);
+            const b = Math.round(rgb.b + (255 - rgb.b) * percent);
+            return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+        }
+
+        function updateStats() {
+            document.getElementById('cat-count-all').innerText = allColors.length;
+            document.getElementById('cat-count-yellow').innerText = allColors.filter(c => c.cat === 'yellow').length;
+            document.getElementById('cat-count-red').innerText = allColors.filter(c => c.cat === 'red').length;
+            document.getElementById('cat-count-blue').innerText = allColors.filter(c => c.cat === 'blue').length;
+            document.getElementById('cat-count-other').innerText = allColors.filter(c => c.cat === 'other').length;
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
+            const clearBtn = document.getElementById('search-clear');
+            if (searchQuery.length > 0) clearBtn.classList.remove('hidden');
+            else clearBtn.classList.add('hidden');
+            render();
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            searchQuery = '';
+            document.getElementById('search-clear').classList.add('hidden');
+            render();
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-tab').forEach(btn => {
+                btn.className = "cat-tab px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 transition-all";
+            });
+            const active = document.getElementById(`cat-btn-${cat}`);
+            if (active) active.className = "cat-tab px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap bg-brand-600 text-white shadow-sm transition-all";
+            render();
+        }
+
+        function handleSortChange() {
+            currentSort = document.getElementById('sort-select').value;
+            render();
+        }
+
+        function getFilteredColors() {
+            return allColors.filter(item => {
+                if (currentCategory !== 'all' && item.cat !== currentCategory) return false;
+                if (searchQuery) return item.code.toLowerCase().includes(searchQuery);
+                return true;
+            }).sort((a, b) => {
+                if (currentSort === 'code-asc') return a.code.localeCompare(b.code);
+                if (currentSort === 'code-desc') return b.code.localeCompare(a.code);
+                if (currentSort === 'lightness-desc') return b.lightness - a.lightness;
+                if (currentSort === 'lightness-asc') return a.lightness - b.lightness;
+                return 0;
+            });
+        }
+
+        // Render Grid View (Optimized for Mobile Cards)
+        function render() {
+            const list = getFilteredColors();
+            const container = document.getElementById('color-display-container');
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-10 bg-slate-50 dark:bg-slate-900 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-center">
+                        <i class="fa-solid fa-swatchbook text-3xl text-slate-400 mb-2"></i>
+                        <p class="text-xs font-bold text-slate-800 dark:text-slate-300">Không tìm thấy mã màu trùng khớp</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `<div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 bg-slate-100/60 dark:bg-slate-900/60 p-2 rounded-xl">`;
+            list.forEach(item => {
+                const isCompared = compareList.some(c => c.id === item.id);
+
+                html += `
+                    <div class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden flex flex-col justify-between p-1.5 transition-all border border-slate-200 dark:border-slate-700/80 shadow-sm ${isCompared ? 'ring-2 ring-brand-500 border-brand-500' : ''}">
+                        <div onclick="openInspectModal(${item.id})" class="h-20 sm:h-24 w-full cursor-pointer relative color-checkered-bg rounded-lg overflow-hidden">
+                            <div class="w-full h-full rounded-lg transition-transform duration-200 group-hover:scale-105" style="background-color: ${item.hex};"></div>
+
+                            <button onclick="event.stopPropagation(); protectedAction(() => deleteSingleColor(${item.id}), 'Xóa mã màu ${item.code}')" title="Xóa" class="absolute bottom-1 right-1 w-5 h-5 rounded bg-rose-600 text-white opacity-90 sm:opacity-0 sm:group-hover:opacity-100 flex items-center justify-center shadow">
+                                <i class="fa-solid fa-trash-can text-[9px]"></i>
+                            </button>
+                        </div>
+
+                        <div class="p-1 space-y-0.5 bg-white dark:bg-slate-800">
+                            <h4 onclick="openInspectModal(${item.id})" class="font-bold text-[11px] sm:text-xs text-slate-900 dark:text-slate-100 hover:text-brand-600 cursor-pointer truncate" title="${item.code}">
+                                ${item.code}
+                            </h4>
+                            
+                            <div class="flex items-center justify-between pt-0.5" onclick="event.stopPropagation()">
+                                <label class="inline-flex items-center gap-1 cursor-pointer text-[9px] font-bold text-slate-700 dark:text-slate-300">
+                                    <input type="checkbox" ${isCompared ? 'checked' : ''} onchange="toggleCompareItem(${item.id})" class="w-3 h-3 rounded text-brand-600 border-slate-300 cursor-pointer">
+                                    <span>So sánh</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function setCompareSize(size) {
+            compareSize = size;
+            ['sm', 'md', 'lg'].forEach(s => {
+                const btn = document.getElementById(`size-btn-${s}`);
+                if(btn) {
+                    btn.className = s === size 
+                        ? "px-2 py-0.5 rounded-md font-bold bg-brand-600 text-white shadow-sm"
+                        : "px-2 py-0.5 rounded-md font-bold text-slate-600 dark:text-slate-400";
+                }
+            });
+            updateCompareBoard();
+        }
+
+        function toggleTintsVisibility() {
+            showTints = !showTints;
+            const btnText = document.getElementById('tints-btn-text');
+            const btn = document.getElementById('toggle-tints-btn');
+            const panel = document.getElementById('tints-panel');
+
+            if (showTints) {
+                btnText.innerText = "Ẩn Dải Nhạt";
+                btn.className = "px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold bg-brand-600 text-white border border-brand-500 transition-all flex items-center gap-1 shadow-sm";
+                panel.classList.remove('hidden');
+            } else {
+                btnText.innerText = "Dải Màu Nhạt";
+                btn.className = "px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-bold bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-600 transition-all flex items-center gap-1 shadow-sm";
+                panel.classList.add('hidden');
+            }
+            updateCompareBoard();
+        }
+
+        function toggleCompareItem(id) {
+            const index = compareList.findIndex(c => c.id === id);
+            if (index > -1) {
+                compareList.splice(index, 1);
+            } else {
+                const item = allColors.find(c => c.id === id);
+                if (item) compareList.push(item);
+            }
+            updateCompareBoard();
+            render();
+        }
+
+        function clearCompareList() {
+            compareList = [];
+            updateCompareBoard();
+            render();
+        }
+
+        function updateCompareBoard() {
+            const badge = document.getElementById('compare-count-badge');
+            badge.innerText = `${compareList.length} màu`;
+
+            const seamlessContainer = document.getElementById('compare-board-seamless');
+            const tintsContainer = document.getElementById('tints-board-container');
+
+            if (compareList.length === 0) {
+                seamlessContainer.innerHTML = `
+                    <div class="w-full flex flex-col items-center justify-center py-6 text-slate-500 text-center">
+                        <i class="fa-solid fa-arrow-pointer text-base mb-1"></i>
+                        <span class="text-[11px] font-bold">Tích chọn "So sánh" để hiển thị màu ở đây</span>
+                    </div>
+                `;
+                if (tintsContainer) tintsContainer.innerHTML = '';
+                return;
+            }
+
+            let minHeightClass = "min-h-[160px]";
+            if (compareSize === 'sm') minHeightClass = "min-h-[70px]";
+            if (compareSize === 'md') minHeightClass = "min-h-[110px]";
+            if (compareSize === 'lg') minHeightClass = "min-h-[160px]";
+
+            let seamlessHtml = '';
+            let tintsHtmlContent = '';
+
+            compareList.forEach((item, index) => {
+                seamlessHtml += `
+                    <div draggable="true" 
+                         ondragstart="handleDragStart(event, ${index})" 
+                         ondragover="handleDragOver(event)" 
+                         ondrop="handleDrop(event, ${index})"
+                         ondragend="handleDragEnd(event)"
+                         class="relative flex-1 flex flex-col h-full cursor-grab active:cursor-grabbing group min-w-[60px] sm:min-w-[70px] transition-all border-r border-slate-300 dark:border-slate-900 last:border-r-0">
+                         
+                         <div class="w-full flex-1 ${minHeightClass} relative rounded-t-lg overflow-hidden" style="background-color: ${item.hex};" title="${item.code}">
+                             <button onclick="toggleCompareItem(${item.id})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/50 text-white flex items-center justify-center text-[10px] shadow">
+                                <i class="fa-solid fa-xmark"></i>
+                             </button>
+                             <span class="absolute top-1 left-1 px-1 py-0.2 rounded bg-black/40 text-white font-mono text-[8px]">
+                                #${index + 1}
+                             </span>
+                         </div>
+
+                         <div class="bg-slate-100 dark:bg-slate-900 p-1 text-center border-t border-slate-300 dark:border-slate-700/60 rounded-b-lg">
+                             <span class="font-black text-[10px] sm:text-xs text-slate-900 dark:text-white block truncate" title="${item.code}">${item.code}</span>
+                         </div>
+                    </div>
+                `;
+
+                if (showTints) {
+                    const t20 = getTintHex(item.hex, 0.2);
+                    const t40 = getTintHex(item.hex, 0.4);
+                    const t60 = getTintHex(item.hex, 0.6);
+                    const t80 = getTintHex(item.hex, 0.8);
+                    tintsHtmlContent += `
+                        <div class="flex-1 flex flex-col gap-1 min-w-[60px] bg-white dark:bg-slate-800 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <span class="text-[9px] font-bold text-slate-800 dark:text-slate-300 truncate">${item.code}</span>
+                            <div class="flex h-7 w-full rounded overflow-hidden shadow-inner">
+                                <div style="background-color: ${t20}" class="flex-1"></div>
+                                <div style="background-color: ${t40}" class="flex-1"></div>
+                                <div style="background-color: ${t60}" class="flex-1"></div>
+                                <div style="background-color: ${t80}" class="flex-1"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            seamlessContainer.innerHTML = seamlessHtml;
+            if (tintsContainer && showTints) {
+                tintsContainer.innerHTML = tintsHtmlContent;
+            }
+        }
+
+        function handleDragStart(e, index) {
+            draggedIndex = index;
+            e.dataTransfer.effectAllowed = 'move';
+            e.target.classList.add('opacity-40');
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDrop(e, targetIndex) {
+            if (e.stopPropagation) e.stopPropagation();
+            if (draggedIndex !== null && draggedIndex !== targetIndex) {
+                const movedItem = compareList.splice(draggedIndex, 1)[0];
+                compareList.splice(targetIndex, 0, movedItem);
+                updateCompareBoard();
+            }
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('opacity-40');
+            draggedIndex = null;
+        }
+
+        function protectedAction(actionFn, description = "Thực hiện thao tác") {
+            pendingAction = actionFn;
+            document.getElementById('password-action-desc').innerText = `Nhập mật khẩu để: ${description}.`;
+            document.getElementById('input-password-auth').value = '';
+            document.getElementById('password-error-msg').classList.add('hidden');
+            
+            const modal = document.getElementById('modal-password');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closePasswordModal() {
+            const modal = document.getElementById('modal-password');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                pendingAction = null;
+            }, 200);
+        }
+
+        function verifyAndExecutePassword() {
+            const input = document.getElementById('input-password-auth').value;
+            if (input === adminPassword) {
+                closePasswordModal();
+                if (typeof pendingAction === 'function') {
+                    pendingAction();
+                }
+            } else {
+                document.getElementById('password-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function openPasswordConfigModal() {
+            document.getElementById('input-current-pass').value = '';
+            document.getElementById('input-new-pass').value = '';
+            const modal = document.getElementById('modal-config-pass');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closePasswordConfigModal() {
+            const modal = document.getElementById('modal-config-pass');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function saveNewAdminPassword() {
+            const curr = document.getElementById('input-current-pass').value;
+            const next = document.getElementById('input-new-pass').value;
+
+            if (curr !== adminPassword) {
+                showToast("Mật khẩu hiện tại không đúng!", "warning");
+                return;
+            }
+
+            if (!next || next.length < 4) {
+                showToast("Mật khẩu mới tối thiểu 4 ký tự!", "warning");
+                return;
+            }
+
+            adminPassword = next;
+            localStorage.setItem('colorpro_admin_pass', next);
+            closePasswordConfigModal();
+            showToast("Cập nhật mật khẩu thành công!", "success");
+        }
+
+        function deleteSingleColor(id) {
+            const index = allColors.findIndex(c => c.id === id);
+            if (index > -1) {
+                const code = allColors[index].code;
+                allColors.splice(index, 1);
+                compareList = compareList.filter(c => c.id !== id);
+
+                saveColorsToStorage();
+                render();
+                updateCompareBoard();
+                showToast(`Đã xóa: ${code}`, "info");
+            }
+        }
+
+        function executeClearAllColors() {
+            allColors = [];
+            compareList = [];
+            saveColorsToStorage();
+            updateCompareBoard();
+            render();
+            showToast("Đã xóa toàn bộ mã màu!", "warning");
+        }
+
+        function submitAddColorForm() {
+            const code = document.getElementById('add-code').value.trim();
+            const hex = document.getElementById('add-color-picker').value.toUpperCase();
+            const cat = document.getElementById('add-category').value;
+
+            if (!code) return;
+
+            const rgb = hexToRgb(hex);
+            const lightness = calculateLightness(rgb.r, rgb.g, rgb.b);
+
+            const newObj = {
+                id: allColors.length > 0 ? Math.max(...allColors.map(c => c.id)) + 1 : 0,
+                code,
+                hex,
+                cat,
+                rgb,
+                lightness
+            };
+
+            allColors.push(newObj);
+            saveColorsToStorage();
+            showToast(`Đã thêm: ${code}`, "success");
+            document.getElementById('add-color-form').reset();
+            render();
+            switchTab(1);
+        }
+
+        function resetDefaultColors() {
+            localStorage.removeItem('bpvn_master_list');
+            loadColorsData();
+            updateStats();
+            render();
+            showToast("Đã khôi phục dữ liệu gốc!", "success");
+        }
+
+        function openInspectModal(id) {
+            const item = allColors.find(c => c.id === id);
+            if (!item) return;
+
+            const modal = document.getElementById('modal-inspect');
+            document.getElementById('modal-color-preview').style.backgroundColor = item.hex;
+            document.getElementById('modal-color-code').innerText = item.code;
+            document.getElementById('modal-category-badge').innerText = item.cat.toUpperCase();
+
+            document.getElementById('modal-btn-compare').onclick = () => {
+                toggleCompareItem(item.id);
+                closeInspectModal();
+            };
+
+            document.getElementById('modal-btn-delete').onclick = () => {
+                closeInspectModal();
+                protectedAction(() => deleteSingleColor(item.id), `Xóa mã màu ${item.code}`);
+            };
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeInspectModal() {
+            const modal = document.getElementById('modal-inspect');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function setupDragAndDrop() {
+            const dropZone = document.getElementById('image-drop-zone');
+            if (!dropZone) return;
+            
+            ['dragenter', 'dragover'].forEach(name => {
+                dropZone.addEventListener(name, (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('border-brand-500', 'bg-slate-200');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(name => {
+                dropZone.addEventListener(name, (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('border-brand-500', 'bg-slate-200');
+                }, false);
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type.startsWith('image/')) {
+                    processImageFile(files[0]);
+                }
+            });
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                processImageFile(file);
+            }
+        }
+
+        function processImageFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    loadedImage = img;
+                    drawCanvasImage();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function drawCanvasImage() {
+            if (!loadedImage) return;
+
+            const canvas = document.getElementById('analyzer-canvas');
+            const ctx = canvas.getContext('2d');
+            const placeholder = document.getElementById('img-placeholder');
+
+            const maxWidth = 600;
+            let width = loadedImage.width;
+            let height = loadedImage.height;
+
+            if (width > maxWidth) {
+                height = Math.round((height * maxWidth) / width);
+                width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.drawImage(loadedImage, 0, 0, width, height);
+
+            placeholder.classList.add('hidden');
+            canvas.classList.remove('hidden');
+
+            sampleCanvasColor(Math.floor(width / 2), Math.floor(height / 2));
+        }
+
+        function pickColorFromCanvas(e) {
+            const canvas = document.getElementById('analyzer-canvas');
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            const x = Math.floor((e.clientX - rect.left) * scaleX);
+            const y = Math.floor((e.clientY - rect.top) * scaleY);
+            sampleCanvasColor(x, y);
+        }
+
+        function sampleCanvasColor(x, y) {
+            const canvas = document.getElementById('analyzer-canvas');
+            const ctx = canvas.getContext('2d');
+
+            if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return;
+
+            const pixelData = ctx.getImageData(x, y, 1, 1).data;
+            const pickedRgb = { r: pixelData[0], g: pixelData[1], b: pixelData[2] };
+
+            document.getElementById('picked-color-swatch').style.backgroundColor = `rgb(${pickedRgb.r}, ${pickedRgb.g}, ${pickedRgb.b})`;
+
+            if (allColors.length > 0) {
+                const scored = allColors.map(c => {
+                    const distance = calculateColorDistance(pickedRgb, c.rgb);
+                    return { ...c, distance };
+                }).sort((a, b) => a.distance - b.distance);
+
+                const topMatch = scored[0];
+                document.getElementById('matched-color-swatch').style.backgroundColor = topMatch.hex;
+                document.getElementById('matched-code-label').innerText = topMatch.code;
+                document.getElementById('match-results-box').classList.remove('hidden');
+            }
+        }
+
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-slate-800 text-white";
+            let icon = "fa-circle-info";
+
+            if (type === "success") {
+                bgClass = "bg-emerald-600 text-white";
+                icon = "fa-circle-check";
+            } else if (type === "warning") {
+                bgClass = "bg-amber-500 text-white";
+                icon = "fa-triangle-exclamation";
+            }
+
+            toast.className = `${bgClass} text-xs font-bold px-3 py-2 rounded-xl shadow-lg flex items-center gap-2 transform translate-y-2 opacity-0 transition-all duration-200 pointer-events-auto`;
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 200);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
